@@ -478,6 +478,7 @@ import axios from "axios";
 import _ from "lodash";
 import utils from "@/helpers/utils";
 import BaseMap from "@/components/BaseMap.vue";
+import { Carousel, Slide } from "vue-carousel";
 
 export default {
   name: "properties",
@@ -489,6 +490,8 @@ export default {
     ExtraFilters,
     Map,
     BaseMap,
+    Carousel,
+    Slide,
   },
   data() {
     return {

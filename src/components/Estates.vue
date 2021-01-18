@@ -1,11 +1,21 @@
 <template>
   <div class="items mt-8 lg:grid grid-cols-3 gap-16">
     <div v-for="estate in estates" :key="estate.EstateID" class="relative">
-      <img
+      <carousel :perPage="1">
+        <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
+          <img
+            :src="picture.Url"
+            class="w-full object-cover cursor-pointer"
+            style="height: 400px"
+            @click="displayDetails(estate)"
+          />
+        </slide>
+      </carousel>
+      <!--<img
         @click="displayDetails(estate)"
         :src="estate.mainPicture"
         class="w-full h-56 object-cover cursor-pointer"
-      />
+      />-->
       <div>
         <h2 class="font-bold my-2">{{ estate.Name }} - {{ estate.categoryName }}</h2>
         <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
@@ -54,10 +64,13 @@
 <script>
 import EstateModal from "@/components/EstateModal.vue";
 import axios from "axios";
+import { Carousel, Slide } from "vue-carousel";
 
 export default {
   components: {
     EstateModal,
+    Carousel,
+    Slide,
   },
   data: function() {
     return {

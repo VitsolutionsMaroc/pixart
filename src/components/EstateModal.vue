@@ -78,11 +78,15 @@
               Contacter par telphone
             </h2>
 
-            <button @click="bookTour = !bookTour" class="mt-2 w-full m-auto">
+            <button @click="displayToor" class="mt-2 w-full m-auto">
               BOOK A TOUR
             </button>
             <!-- Modal BOOK TOUR -->
-            <div v-if="bookTour" class="modal-mask bookTour hidden">
+            <v-modal height="auto" :adaptive="true" :min-width="870" :scrollable="true" name="toor">
+              <toor-modal />
+            </v-modal>
+            <!-- /////////////////////////// -->
+            <div v-if="bookTour" class="modal-mask bookTour">
               <div class="modal-wrapper rapperTour">
                 <div class="modal-container w-1/2 h-auto containerTour">
                   <button class="modal-default-button float-right" @click="bookTour = !bookTour">
@@ -195,6 +199,7 @@
 
 <script>
 import VueEnglishdatepicker from "vue-englishdatepicker";
+import ToorModal from "@/components/ToorModal.vue";
 import DatePick from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
 import Loader from "@/components/shared/Loader.vue";
@@ -213,6 +218,7 @@ export default {
     Loader,
     Carousel,
     Slide,
+    ToorModal,
   },
   data: function() {
     return {
@@ -256,6 +262,10 @@ export default {
     };
   },
   methods: {
+    displayToor() {
+      console.log("hererere");
+      this.$modal.show("toor");
+    },
     prevSlide() {
       this.picSwiper.slidePrev();
     },
@@ -354,8 +364,6 @@ export default {
 <style scoped>
 .bookTour {
   width: 100%;
-}
-.rapperTour {
 }
 .containerTour {
   width: 500px;
