@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full w-full">
-    <button @click="openEstateModal()">=====================</button>
+  <div class="h-full w-full py-3 px-6 mr-4">
+    <button @click="openEstateModal()">test</button>
     <div id="map" class="basemap"></div>
   </div>
   <!-- <div>
