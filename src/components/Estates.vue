@@ -1,7 +1,7 @@
 <template>
-  <div class="items mt-8 lg:grid grid-cols-3 gap-16">
-    <div v-for="estate in estates" :key="estate.EstateID" class="relative">
-      <carousel :perPage="1">
+  <div class="items mt-8 lg:grid grid-cols-3 gap-16" style="">
+    <div v-for="estate in estates" :key="estate.EstateID" class="relative mb-12">
+      <carousel :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
           <img
             :src="picture.Url"
@@ -16,20 +16,20 @@
         :src="estate.mainPicture"
         class="w-full h-56 object-cover cursor-pointer"
       />-->
-      <div>
+      <div class="h-32">
         <h2 class="font-bold my-2">{{ estate.Name }} - {{ estate.categoryName }}</h2>
         <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
-        <span class="block text-black">
-          <span v-if="estate.Rooms">
-            <i class="fas fa-bed mr-12 text-yellow-500"></i>
+        <span class="block text-black ">
+          <span v-if="estate.Rooms" class="mr-2 md:mr-10">
+            <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
           </span>
-          <span v-if="estate.Bathrooms">
-            <i class="fas fa-sink mx-2 mr-12 text-yellow-500"></i>
+          <span v-if="estate.Bathrooms" class="mr-2 md:mr-10">
+            <i class="fas fa-sink   text-yellow-500"></i>
             {{ estate.Bathrooms }}
           </span>
-          <span v-if="estate.Area">
-            <i class="fas fa-ruler-combined mx-2 text-yellow-500"></i>
+          <span v-if="estate.Area" class="mr-2 md:mr-10">
+            <i class="fas fa-ruler-combined  text-yellow-500"></i>
             {{ estate.Area }}
           </span>
         </span>

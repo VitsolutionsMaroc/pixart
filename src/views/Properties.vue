@@ -53,7 +53,7 @@
       <!-- search input -->
       <!-- dropdowns -->
       <div class="flex items-center space-x-3 mb-4 ">
-        <div class="grid md:grid-cols-2  xl:grid-cols-8 xl:gap-4 gap-2">
+        <div class="grid md:grid-cols-2  xl:grid-cols-7 xl:gap-4 gap-2">
           <div class="xl:col-span-2">
             <multiselect
               placeholder="categories"
@@ -132,16 +132,16 @@
               class="md:px-3 py-2 border"
             />
           </div>
-          <div class="grid grid-cols-2">
+          <div class="grid grid-cols-2 gap-4">
             <button
               @click="getEstates()"
-              class="px-5 py-2 border-yellow-500 text-white bg-yellow-500 mr-2 font-bold"
+              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 mr-2 font-bold"
             >
               Apply
             </button>
             <button
               @click="messagePopup = !messagePopup"
-              class="px-5 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
             >
               <!--<i class="far fa-plus-circle font-bold text-4xl text-yellow-500"></i>-->
               More
@@ -449,11 +449,6 @@
         </div>
         <Estates :estates="estates" />
       </div>
-
-      <v-modal name="example">This is a modal</v-modal>
-      <button class="bg-green-500 p-4" @click="openModal()">
-        Open modal ==============================
-      </button>
 
       <!-- ./EstateList -->
       <estate-pagination

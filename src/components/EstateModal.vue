@@ -14,7 +14,7 @@
           <span class="block my-2">{{ estate.Address1 }}</span>
           <span class="block my-2"> Price : {{ estate.Price }} {{ estate.Currency }} </span>
           <span class="mr-8"
-            ><i class="fas fa-sink mr-2 text-yellow-500"> </i>
+            ><i class="fas fa-sink mr-2 text-yellow-500"></i>
             {{ estate.Rooms }}
           </span>
           <span class="mr-8"
@@ -58,88 +58,47 @@
                     />
                     <button type="submit">Send</button>
                   </form>-->
-          <div
-            v-if="estate.RepresentativeID != null"
-            class="relative float-right shadow-2xl bg-white border-gray-200 w-72 h-72 p-4"
-          >
-            <img
-              :src="estate.representativePicture"
-              class="rounded-full h-24 w-24 flex items-center m-auto"
-            />
+          <div class="relative float-right shadow-2xl bg-white border-gray-200 w-72 h-62 p-4">
+            <div v-if="estate.RepresentativeID != null">
+              <img
+                :src="estate.representativePicture"
+                class="rounded-full h-24 w-24 flex items-center m-auto"
+              />
 
-            <h2 class="mt-2 text-center m-auto">
-              {{ estate.representativeName }}
-              {{ estate.representativeLastName }}
-            </h2>
+              <h2 class="mt-2 text-center m-auto">
+                {{ estate.representativeName }}
+                {{ estate.representativeLastName }}
+              </h2>
+            </div>
             <h2 class="mt-2 text-center m-auto bg-yellow-500 text-white p-2">
-              contacter par E-mail
-            </h2>
-            <h2 class="mt-2 text-center m-auto bg-gray-200 text-gray-600 p-2">
-              Contacter par telphone
+              Contact us
             </h2>
 
             <button @click="displayToor" class="mt-2 w-full m-auto">
               BOOK A TOUR
             </button>
             <!-- Modal BOOK TOUR -->
-            <v-modal height="auto" :adaptive="true" :min-width="870" :scrollable="true" name="toor">
+            <v-modal height="auto" :adaptive="true" :min-width="100" :scrollable="true" name="toor">
               <toor-modal />
             </v-modal>
-            <!-- /////////////////////////// -->
-            <div v-if="bookTour" class="modal-mask bookTour">
-              <div class="modal-wrapper rapperTour">
-                <div class="modal-container w-1/2 h-auto containerTour">
-                  <button class="modal-default-button float-right" @click="bookTour = !bookTour">
-                    <i class="fas fa-times"></i>
-                  </button>
-                  <!--<vue-englishdatepicker />-->
-                  <date-pick v-model="date"></date-pick>
-                  <p class="italic text-gray-400 my-2">
-                    <span class="w-2 h-2 bg-yellow-500"></span
-                    ><span
-                      >Book Your visit by choosing te date <br />
-                      And time from the calendar</span
-                    >
-                  </p>
-                  <label class="my-2">First Name</label>
-                  <input
-                    type="text"
-                    placeholder="First Name"
-                    class="px-3 py-2 my-2 border block w-full"
-                  />
-                  <label>Last Name</label>
-                  <input
-                    type="text"
-                    placeholder="Last Name"
-                    class="px-3 py-2 my-2 border block w-full"
-                  />
-                  <label>Phone Number</label>
-                  <input
-                    type="text"
-                    placeholder="Phone Number"
-                    class="px-3 py-2 my-2 border block w-full"
-                  />
-                  <button class="block bg-yellow-500 w-full py-3 mt-6 text-white font-bold text-lg">
-                    Book visit
-                  </button>
-                  <button
-                    @click="bookTour = !bookTour"
-                    class="block w-full py-3 my-2 text-gray-400 font-bold text-lg"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
             <!-- Modal BOOK TOUR -->
           </div>
         </div>
       </div>
       <hr />
-      <h2 class="my-2 font-bold text-lg">Similar Properties</h2>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="flex justify-between">
+        <h2 class="my-2 font-bold text-lg">Similar Properties</h2>
+        <button
+          class="my-2 font-bold text-lg"
+          v-show="relatedEstateApiUrl && !loadingRelatedEstates"
+          @click="loadRelatedEstates()"
+        >
+          More related Estates
+        </button>
+      </div>
+      <div class="grid grid-cols-4 gap-4">
         <div
-          class="relative border border-yellow-300"
+          class="relative"
           v-for="relatedEstate in relatedEstates"
           :key="relatedEstate.EstateID"
           @click="displayRelatedEstateDetails(relatedEstate)"
@@ -149,7 +108,7 @@
               <img :src="picture.Url" class="w-full h-56 object-cover cursor-pointer" />
             </slide>
           </carousel>
-          <div class="p-2">
+          <div class="p-2 h-56">
             <h2 class="font-bold my-2">
               {{ relatedEstate.Name }} - {{ relatedEstate.categoryName }}
             </h2>
@@ -185,13 +144,6 @@
           </button>
         </div>
         <loader class="px-2 py-10" v-show="loadingRelatedEstates" />
-        <button
-          class="border-2 border-yellow-500 border-dashed text-bold text-yellow-500 p-4 h-full"
-          v-show="relatedEstateApiUrl && !loadingRelatedEstates"
-          @click="loadRelatedEstates()"
-        >
-          More related Estates
-        </button>
       </div>
     </div>
   </div>
