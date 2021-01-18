@@ -8,8 +8,11 @@ export default {
     return queryString;
   },
   flatten(arr) {
-    return arr.reduce(function (flat, toFlatten) {
+    return arr.reduce(function(flat, toFlatten) {
       return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
-  }
+  },
+  inArray(array, item) {
+    return array.filter((i) => i == item).length != 0;
+  },
 };

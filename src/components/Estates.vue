@@ -1,28 +1,28 @@
 <template>
-  <div class="items mt-8 lg:grid grid-cols-3 lg:gap-4 xl:gap-16">
-    <div v-for="estate in estates" :key="estate.EstateID" class="relative border border-yellow-200">
+  <div class="items mt-8 lg:grid grid-cols-3 gap-16">
+    <div v-for="estate in estates" :key="estate.EstateID" class="relative">
       <img
         @click="displayDetails(estate)"
         :src="estate.mainPicture"
         class="w-full h-56 object-cover cursor-pointer"
       />
-      <div class="p-3">
+      <div>
         <h2 class="font-bold my-2">{{ estate.Name }} - {{ estate.categoryName }}</h2>
         <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
-        <div class="text-black grid grid-cols-3">
-          <div v-if="estate.Rooms">
-            <i class="fas fa-bed mr-2 text-yellow-500"></i>
+        <span class="block text-black">
+          <span v-if="estate.Rooms">
+            <i class="fas fa-bed mr-12 text-yellow-500"></i>
             {{ estate.Rooms }}
-          </div>
-          <div v-if="estate.Bathrooms">
-            <i class="fas fa-sink mx-2 mr-2 text-yellow-500"></i>
+          </span>
+          <span v-if="estate.Bathrooms">
+            <i class="fas fa-sink mx-2 mr-12 text-yellow-500"></i>
             {{ estate.Bathrooms }}
-          </div>
-          <div v-if="estate.Area">
+          </span>
+          <span v-if="estate.Area">
             <i class="fas fa-ruler-combined mx-2 text-yellow-500"></i>
             {{ estate.Area }}
-          </div>
-        </div>
+          </span>
+        </span>
         <span v-if="estate.Price" class="block my-2">{{ estate.Price }} {{ estate.Currency }}</span>
       </div>
       <div
@@ -30,7 +30,6 @@
       >
         <span>{{ estate.purpose }}</span>
       </div>
-
       <button
         @click="displayDetails(estate)"
         class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm mb-2 block text-white"
@@ -38,13 +37,17 @@
         Details
       </button>
     </div>
+
     <!-- Estate Modal -->
-    <estate-modal
-      :estate="selectedEstate.estate"
-      :related-estates="selectedEstate.relatedEstates"
-      v-if="popup"
-      @close="popup = false"
-    />
+    <v-modal
+      height="auto"
+      :adaptive="true"
+      :min-width="870"
+      :scrollable="true"
+      name="estate-details"
+    >
+      <estate-modal :estate="selectedEstate" :key="'modal-key-' + selectedEstate.EstateID" />
+    </v-modal>
   </div>
 </template>
 
@@ -58,7 +61,6 @@ export default {
   },
   data: function() {
     return {
-      popup: false,
       selectedEstate: {
         estate: null,
         relatedEstates: null,
@@ -66,16 +68,11 @@ export default {
     };
   },
   methods: {
-    displayDetails: function(estate) {
-      axios
-        .get(`https://apivitexport.azurewebsites.net/api/estates/${estate.EstateID}`)
-        .then((response) => {
-          this.selectedEstate = response.data;
-          this.popup = !this.popup;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    displayDetails(estate) {
+      console.log("hererere");
+      //this.$modal.hide("estate-details");
+      this.selectedEstate = estate;
+      this.$modal.show("estate-details");
     },
   },
   props: {

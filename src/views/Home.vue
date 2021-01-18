@@ -10,14 +10,116 @@
           </h1>
         </div>
         <div class="mt-12">
-          <button class="px-8 py-2 bg-gray-200 mr-2">Buy</button>
-          <button class="px-8 py-2 bg-gray-200 mr-2">Rent</button>
-          <div class="grid grid-cols-5 gap-4 mt-4">
-            <input type="text" placeholder="Search" class="px-3 py-2 border col-span-2" />
-            <input type="text" placeholder="Countries" class="col-span-1 px-3 py-2 border" />
-            <input type="text" placeholder="Categories" class="px-3 col-span-1 py-2 border" />
-            <button class="bg-yellow-500 col-span-1 text-lg font-bold">
-              submit
+          <div class="flex">
+            <button
+              class="border-2 px-7 p-1 text-black bg-white"
+              @click="togglePurpose()"
+              :class="{
+                'bg-yellow-500 border-yellow-500': filters.purpose == 'for sale',
+              }"
+            >
+              Buy
+            </button>
+            <button
+              class="border-2 px-5 p-1 text-black bg-white"
+              @click="togglePurpose()"
+              :class="{
+                'bg-yellow-500 border-yellow-500': filters.purpose == 'for rent',
+              }"
+            >
+              Rental
+            </button>
+          </div>
+          <div class="grid grid-cols-4 gap-4 mt-4">
+            <div class="flex w-full border-grey-light bg-white border mb-2">
+              <button>
+                <span class="w-auto flex justify-end items-center text-grey p-2">
+                  <svg
+                    class="w-6 h-6 bg-yelleow-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
+              <input
+                class="w-full rounded mr-4"
+                type="text"
+                placeholder="Search..."
+                v-model="filters.keyword"
+              />
+            </div>
+            <multiselect
+              placeholder="categories"
+              label="name"
+              track-by="name"
+              :multiple="true"
+              value="id"
+              v-model="filters.categories"
+              :options="categories"
+              :close-on-select="false"
+              :show-labels="false"
+              :clear-on-select="false"
+            >
+              <div
+                class="selection-count"
+                slot="selection"
+                slot-scope="{ values, search, isOpen, remove }"
+              >
+                <template v-if="!isOpen && values.length">
+                  {{ values.length }}
+                  {{ values.length > 1 ? "categories" : "category" }} selected
+                </template>
+              </div>
+              <template slot="option" slot-scope="props">
+                <div class="flex justify-between items-center">
+                  <span>{{ props.option.name }}</span>
+                  <span
+                    v-if="isCategorySelected(props.option.id)"
+                    class="text-right text-sm"
+                  ></span>
+                </div>
+              </template>
+            </multiselect>
+            <multiselect
+              placeholder="countries"
+              label="name"
+              track-by="name"
+              :multiple="true"
+              value="id"
+              v-model="filters.countries"
+              :options="countries"
+              :close-on-select="false"
+              :show-labels="false"
+              :clear-on-select="false"
+            >
+              <div
+                class="selection-count"
+                slot="selection"
+                slot-scope="{ values, search, isOpen, remove }"
+              >
+                <template v-if="!isOpen && values.length">
+                  {{ values.length }}
+                  {{ values.length > 1 ? "categories" : "category" }} selected
+                </template>
+              </div>
+              <template slot="option" slot-scope="props">
+                <div class="flex justify-between items-center">
+                  <span>{{ props.option.name }}</span>
+                  <span v-if="isCountrySelected(props.option.id)" class="text-right text-sm"></span>
+                </div>
+              </template>
+            </multiselect>
+            <button @click="search()" class="bg-yellow-500 text-lg font-bold">
+              Search
             </button>
           </div>
         </div>
@@ -149,14 +251,76 @@
 
 <script>
 import Footer from "@/components/Footer.vue";
+import axios from "axios";
+import Multiselect from "vue-multiselect";
+import _ from "lodash";
 
 export default {
   name: "Home",
   components: {
+    Multiselect,
     Footer,
+  },
+  data() {
+    return {
+      filters: {
+        keyword: "",
+        purpose: "for rent",
+        countries: [],
+        categories: [],
+      },
+      countries: [],
+      categories: [],
+    };
+  },
+  methods: {
+    togglePurpose() {
+      this.filters.purpose = this.filters.purpose == "for rent" ? "for sale" : "for rent";
+    },
+    getCategories() {
+      axios
+        .get(`https://apivitexport.azurewebsites.net/api/categories`)
+        .then((response) => {
+          this.categories = response.data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getCountries() {
+      axios
+        .get(`https://apivitexport.azurewebsites.net/api/countries`)
+        .then((response) => {
+          this.countries = response.data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    isCountrySelected(currentCountry) {
+      return this.filters.countries.filter((country) => country.id === currentCountry).length > 0;
+    },
+    isCategorySelected(currentCategory) {
+      return (
+        this.filters.categories.filter((category) => category.id === currentCategory).length > 0
+      );
+    },
+    search() {
+      let filterParams = {
+        keyword: this.filters.keyword,
+        countries: _.map(this.filters.countries, "id"),
+        categories: _.map(this.filters.categories, "id"),
+      };
+      this.$router.push({ name: "properties", query: filterParams });
+    },
+  },
+  mounted() {
+    this.getCountries();
+    this.getCategories();
   },
 };
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 .slide {
   background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)),

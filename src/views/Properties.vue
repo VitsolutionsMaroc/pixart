@@ -132,7 +132,7 @@
               class="md:px-3 py-2 border"
             />
           </div>
-          <div>
+          <div class="grid grid-cols-2">
             <button
               @click="getEstates()"
               class="px-5 py-2 border-yellow-500 text-white bg-yellow-500 mr-2 font-bold"
@@ -153,7 +153,7 @@
         <!-- modal Extra filters -->
         <div v-if="messagePopup" class="modal-mask w-full">
           <div class="modal-wrapper">
-            <div class="modal-container w-1/2 h-auto">
+            <div class="modal-container md:w-1/2 h-auto">
               <button
                 class="modal-default-button float-right"
                 @click="messagePopup = !messagePopup"
@@ -257,7 +257,7 @@
                   class="px-3 py-2 border"
                 />
               </div>
-              <div class="grid grid-cols-4 mb-12">
+              <div class="grid md:grid-cols-4 mb-12">
                 <span
                   ><label class="m-2"> Parking</label>
                   <input
@@ -445,10 +445,15 @@
       <loader class="px-2 py-10" v-show="loading" />
       <div :class="activeMap ? 'grid grid-cols-2' : ''">
         <div v-if="activeMap">
-          <Map />
+          <BaseMap />
         </div>
         <Estates :estates="estates" />
       </div>
+
+      <v-modal name="example">This is a modal</v-modal>
+      <button class="bg-green-500 p-4" @click="openModal()">
+        Open modal ==============================
+      </button>
 
       <!-- ./EstateList -->
       <estate-pagination
@@ -472,6 +477,7 @@ import Map from "@/components/Map.vue";
 import axios from "axios";
 import _ from "lodash";
 import utils from "@/helpers/utils";
+import BaseMap from "@/components/BaseMap.vue";
 
 export default {
   name: "properties",
@@ -482,8 +488,9 @@ export default {
     Multiselect,
     ExtraFilters,
     Map,
+    BaseMap,
   },
-  data: function() {
+  data() {
     return {
       loading: false,
       filters: {
@@ -536,6 +543,7 @@ export default {
       this.getEstates();
     },
     getEstates() {
+      this.filterFromQueryString();
       this.loading = true;
       let countries = _.map(this.filters.countries, "id");
       let categories = _.map(this.filters.categories, "id");
@@ -575,25 +583,13 @@ export default {
           console.log(error);
         });
     },
-    getCategories() {
-      axios
-        .get(`https://apivitexport.azurewebsites.net/api/categories`)
-        .then((response) => {
-          this.categories = response.data.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    async getCategories() {
+      const response = await axios.get(`https://apivitexport.azurewebsites.net/api/categories`);
+      this.categories = response.data.data;
     },
-    getCountries() {
-      axios
-        .get(`https://apivitexport.azurewebsites.net/api/countries`)
-        .then((response) => {
-          this.countries = response.data.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    async getCountries() {
+      const response = await axios.get(`https://apivitexport.azurewebsites.net/api/countries`);
+      this.countries = response.data.data;
     },
     applyExtraFilters() {
       this.getEstates();
@@ -657,33 +653,123 @@ export default {
           break;
       }
     },
-    isCountrySelected: function(currentCountry) {
+    isCountrySelected(currentCountry) {
       return this.filters.countries.filter((country) => country.id === currentCountry).length > 0;
     },
-    isCategorySelected: function(currentCategory) {
+    isCategorySelected(currentCategory) {
       return (
         this.filters.categories.filter((category) => category.id === currentCategory).length > 0
       );
     },
-    isSubCategorySelected: function(currentSubcategory) {
+    isSubCategorySelected(currentSubcategory) {
       return (
         this.filters.subcategories.filter((subcategory) => subcategory.id === currentSubcategory)
           .length > 0
       );
     },
-    isZipCodeSelected: function(currentZipCode) {
+    isZipCodeSelected(currentZipCode) {
       return this.filters.zipCodes.filter((zipCode) => zipCode.id === currentZipCode).length > 0;
     },
-    hideExtraFilters: function() {
+    hideExtraFilters() {
       this.popup = false;
     },
-    displayExtraFilters: function(estate) {
+    displayExtraFilters(estate) {
       this.popup = !this.popup;
     },
+    test() {
+      this.$router.replace({
+        query: {
+          keyword: "test 33333",
+        },
+      });
+      this.$route.query.keyword = "test 222";
+    },
+    filterFromQueryString() {
+      let params = this.$route.query;
+      if (params.keyword) {
+        this.filters.keyword = params.keyword;
+        console.log(params.keyword);
+      }
+      if (params.countries) {
+        this.filters.countries = _.isArray(params.countries)
+          ? _.filter(this.countries, (item) => utils.inArray(params.countries, item.id))
+          : _.filter(this.countries, (item) => item.id == params.countries);
+      }
+      if (params.categories) {
+        this.filters.categories = _.isArray(params.categories)
+          ? _.filter(this.categories, (item) => utils.inArray(params.categories, item.id))
+          : _.filter(this.categories, (item) => item.id == params.categories);
+      }
+      if (params.purpose) {
+        this.filters.purpose = params.purpose;
+        console.log(params.purpose);
+      }
+    },
+    openModal() {
+      this.$modal.show("example");
+    },
   },
-  mounted() {
-    this.getCategories();
-    this.getCountries();
+  watch: {
+    "filters.keyword"() {
+      const newQueryString = {
+        countries: _.map(this.filters.countries, "id"),
+        categories: _.map(this.filters.categories, "id"),
+        keyword: this.filters.keyword,
+        purpose: this.filters.purpose,
+      };
+
+      this.$router
+        .replace({
+          query: newQueryString,
+        })
+        .catch(() => {});
+    },
+    "filters.purpose"() {
+      const newQueryString = {
+        countries: _.map(this.filters.countries, "id"),
+        categories: _.map(this.filters.categories, "id"),
+        keyword: this.filters.keyword,
+        purpose: this.filters.purpose,
+      };
+
+      this.$router
+        .replace({
+          query: newQueryString,
+        })
+        .catch(() => {});
+    },
+    "filters.countries"() {
+      const newQueryString = {
+        countries: _.map(this.filters.countries, "id"),
+        categories: _.map(this.filters.categories, "id"),
+        keyword: this.filters.keyword,
+        purpose: this.filters.purpose,
+      };
+
+      this.$router
+        .replace({
+          query: newQueryString,
+        })
+        .catch(() => {});
+    },
+    "filters.categories"() {
+      const newQueryString = {
+        countries: _.map(this.filters.countries, "id"),
+        categories: _.map(this.filters.categories, "id"),
+        keyword: this.filters.keyword,
+        purpose: this.filters.purpose,
+      };
+
+      this.$router
+        .replace({
+          query: newQueryString,
+        })
+        .catch(() => {});
+    },
+  },
+  async mounted() {
+    await this.getCategories();
+    await this.getCountries();
     this.getEstates();
   },
 };

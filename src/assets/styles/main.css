@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.VueCarousel-dot-container,
+.VueCarousel-dot-container button {
+  margin: 0 !important;
+}
+.VueCarousel-pagination {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
