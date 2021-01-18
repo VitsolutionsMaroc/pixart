@@ -132,10 +132,10 @@
               class="md:px-3 py-2 border"
             />
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-7">
             <button
               @click="getEstates()"
-              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 mr-2 font-bold"
+              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
             >
               Apply
             </button>

@@ -5,19 +5,21 @@
         <img :src="picture.Url" class="w-full object-cover cursor-pointer" style="height: 400px" />
       </slide>
     </carousel>
-    <hr />
+
     <div class="p-4" style="overflow-y: scroll; max-height: 400px;">
       <div class="grid grid-cols-2 mt-4 mb-4">
         <div class="section">
           <span class="my-2"> {{ estate.Name }} </span>
           <span class="my-2"> {{ estate.CategoryName }} </span>
           <span class="block my-2">{{ estate.Address1 }}</span>
-          <span class="block my-2"> Price : {{ estate.Price }} {{ estate.Currency }} </span>
-          <span class="mr-8"
-            ><i class="fas fa-sink mr-2 text-yellow-500"></i>
-            {{ estate.Rooms }}
+          <span v-if="estate.Price" class="block my-2">
+            Price : {{ estate.Price }} {{ estate.Currency }}
           </span>
-          <span class="mr-8"
+
+          <span class="mr-8" v-if="estate.Rooms"
+            ><i class="fas fa-sink mr-2 text-yellow-500"></i> {{ estate.Rooms }}
+          </span>
+          <span class="mr-8" v-if="estate.Bathrooms"
             ><i class="fas fa-bed mr-2 text-yellow-500"></i> {{ estate.Bathrooms }}</span
           >
           <span mr-8>

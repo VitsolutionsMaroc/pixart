@@ -3,12 +3,14 @@
     <div v-for="estate in estates" :key="estate.EstateID" class="relative mb-12">
       <carousel :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
-          <img
-            :src="picture.Url"
-            class="w-full object-cover cursor-pointer"
-            style="height: 400px"
-            @click="displayDetails(estate)"
-          />
+          <div style="height:400px">
+            <img
+              :src="picture.Url"
+              class="w-full object-cover cursor-pointer"
+              style="height:100%"
+              @click="displayDetails(estate)"
+            />
+          </div>
         </slide>
       </carousel>
       <!--<img
