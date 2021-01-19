@@ -135,7 +135,7 @@
                 class="md:px-3 py-2 border"
               />
             </div>
-            <div class="grid grid-cols-2 gap-7">
+            <div class="grid grid-cols-2 gap-6">
               <button
                 @click="getEstates()"
                 class="px-6 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
