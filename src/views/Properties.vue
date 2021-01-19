@@ -1,7 +1,7 @@
 <template>
   <div class="" style="background:#F7F7F7">
     <div class="main  px-10">
-      <div class="filters px-60">
+      <div class="filters lg:px-60">
         <div class="RentBuy flex justify-center mt-6 float-left mb-2">
           <button
             class="border-2 px-7 p-1 text-black"
@@ -23,7 +23,7 @@
           </button>
         </div>
         <!-- search input -->
-        <div class="flex w-full border-grey-light border mb-2">
+        <div class="flex w-full border-grey-light border mb-2 bg-white">
           <button>
             <span class="w-auto flex justify-end items-center text-grey p-2">
               <svg
@@ -138,13 +138,13 @@
             <div class="grid grid-cols-2 gap-7">
               <button
                 @click="getEstates()"
-                class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+                class="px-6 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
               >
                 Apply
               </button>
               <button
                 @click="messagePopup = !messagePopup"
-                class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+                class="px-6 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
               >
                 <!--<i class="far fa-plus-circle font-bold text-4xl text-yellow-500"></i>-->
                 More
@@ -443,15 +443,15 @@
       <!-- Filters -->
       <div class="mx-2 bg-white p-4">
         <div class="w-full grid grid-cols-2">
-          <div>Results</div>
+          <div class="text-xl">Results</div>
           <div class="flex justify-end">
-            <span class="mr-4 cursor-pointer"
+            <span class="mr-6 cursor-pointer text-xl"
               ><i class="fas fa-check-double text-yellow-500"></i> Select</span
             >
-            <button @click="getEstates()" class="mr-4 cursor-pointer">
+            <button @click="getEstates()" class="mr-6 cursor-pointer text-xl">
               <i class="far fa-clock text-yellow-500"></i> Update
             </button>
-            <button @click="activeMap = !activeMap" class="mr-4 cursor-pointer">
+            <button @click="activeMap = !activeMap" class="mr-4 cursor-pointer text-xl">
               Map view
               <i class="fas fa-toggle-on" style="color:#53D56E"></i>
             </button>

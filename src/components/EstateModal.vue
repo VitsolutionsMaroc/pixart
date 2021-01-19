@@ -2,13 +2,10 @@
   <div>
     <carousel :perPage="1">
       <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
-        <div>
-          
-        </div>
         <img :src="picture.Url" class="w-full object-cover cursor-pointer" style="height: 400px" />
       </slide>
     </carousel>
-
+    <div class="flex justify-end px-4 text-yellow-500"><i class="fas fa-plus-square"></i></div>
     <div class="p-4" style="overflow-y: scroll; max-height: 400px;">
       <div class="grid grid-cols-2 mt-4 mb-4">
         <div class="section">
@@ -39,30 +36,6 @@
           </p>
         </div>
         <div>
-          <!--<form @submit.prevent="addContact()">
-                    <label class="my-2">Address1</label>
-                    <input
-                      type="text"
-                      v-model="contact.Address1"
-                      placeholder="Address"
-                      class="px-3 py-2 my-2 border block w-full"
-                    />
-                    <label class="my-2">Name</label>
-                    <input
-                      type="text"
-                      v-model="contact.Name"
-                      placeholder="Name"
-                      class="px-3 py-2 my-2 border block w-full"
-                    />
-                    <label class="my-2">Zip</label>
-                    <input
-                      type="text"
-                      v-model="contact.Zip"
-                      placeholder="Zip"
-                      class="px-3 py-2 my-2 border block w-full"
-                    />
-                    <button type="submit">Send</button>
-                  </form>-->
           <div class="relative float-right shadow-2xl bg-white border-gray-200 w-72 h-62 p-4">
             <div v-if="estate.RepresentativeID != null">
               <img
@@ -75,13 +48,25 @@
                 {{ estate.representativeLastName }}
               </h2>
             </div>
-            <h2 class="mt-2 text-center m-auto bg-yellow-500 text-white p-2">
+            <button
+              @click="displayContactModal"
+              class="mt-2 text-center m-auto bg-yellow-500 text-white p-2 w-full"
+            >
               Contact us
-            </h2>
-
-            <button @click="displayToor" class="mt-2 w-full m-auto">
-              BOOK A TOUR
             </button>
+            <v-modal
+              height="auto"
+              :adaptive="true"
+              :min-width="100"
+              :scrollable="true"
+              name="contact"
+            >
+              <contact-modal />
+            </v-modal>
+
+            <!--<button @click="displayToor" class="mt-2 w-full m-auto">
+              BOOK A TOUR
+            </button>-->
             <!-- Modal BOOK TOUR -->
             <v-modal height="auto" :adaptive="true" :min-width="100" :scrollable="true" name="toor">
               <toor-modal />
@@ -90,6 +75,8 @@
           </div>
         </div>
       </div>
+      <!--<button @click="displayCreateContact">Create Contact</button>-->
+
       <hr />
       <div class="flex justify-between">
         <h2 class="my-2 font-bold text-lg">Similar Properties</h2>
@@ -132,21 +119,22 @@
                 {{ relatedEstate.Area }}
               </div>
             </div>
-            <span v-if="relatedEstate.Price" class="block my-2"
-              >{{ relatedEstate.Price }} {{ relatedEstate.Currency }}</span
-            >
           </div>
           <div
             class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
           >
             <span>{{ relatedEstate.purpose }}</span>
           </div>
-
-          <button
-            class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm mb-2 block text-white"
-          >
-            Details
-          </button>
+          <div class="flex justify-between">
+            <span v-if="relatedEstate.Price" class="block"
+              >{{ relatedEstate.Price }} {{ relatedEstate.Currency }}</span
+            >
+            <button
+              class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm block text-white"
+            >
+              Details
+            </button>
+          </div>
         </div>
         <loader class="px-2 py-10" v-show="loadingRelatedEstates" />
       </div>
@@ -157,6 +145,7 @@
 <script>
 import VueEnglishdatepicker from "vue-englishdatepicker";
 import ToorModal from "@/components/ToorModal.vue";
+import ContactModal from "@/components/ContactModal.vue";
 import DatePick from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
 import Loader from "@/components/shared/Loader.vue";
@@ -176,6 +165,7 @@ export default {
     Carousel,
     Slide,
     ToorModal,
+    ContactModal,
   },
   data: function() {
     return {
@@ -220,8 +210,13 @@ export default {
   },
   methods: {
     displayToor() {
-      console.log("hererere");
       this.$modal.show("toor");
+    },
+    displayContactModal() {
+      this.$modal.show("contact");
+    },
+    displayCreateContact() {
+      this.$modal.show("createContact");
     },
     prevSlide() {
       this.picSwiper.slidePrev();
@@ -252,7 +247,7 @@ export default {
           console.log(token);
           const config = {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlhdCI6MTYxMTA2MjI1N30.eyJzZXJ2aWNlQ29uc3VtZXJJZCI6MjMzLCJ0eXBlSWQiOjQsImNsaWVudElkIjo0NDV9.lsZ7HrGZ-vU0kh6xBcavI2Y-UP1BM4a8NnIAKcY33Fk`,
               "Content-Type": "application/json",
             },
           };

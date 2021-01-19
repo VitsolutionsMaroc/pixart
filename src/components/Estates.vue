@@ -1,5 +1,5 @@
 <template>
-  <div class="items mt-8 grid xl:grid-cols-3 gap-16" style="">
+  <div class="items mt-8 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 text-xl" style="">
     <div v-for="estate in estates" :key="estate.EstateID" class="relative mb-12">
       <carousel :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
@@ -18,10 +18,13 @@
         :src="estate.mainPicture"
         class="w-full h-56 object-cover cursor-pointer"
       />-->
-      <div class="h-32">
-        <h2 class="font-bold my-2">{{ estate.Name }} - {{ estate.categoryName }}</h2>
+      <div class="h-32 p-3 mb-12">
+        <h2 class="font-bold my-2">
+          {{ estate.Name }} <span v-if="estate.Name && estate.categoryName">-</span>
+          {{ estate.categoryName }}
+        </h2>
         <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
-        <span class="block text-black ">
+        <span class="block text-black my-2">
           <span v-if="estate.Rooms" class="mr-2 md:mr-10">
             <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
@@ -37,15 +40,18 @@
         </span>
       </div>
       <div
-        class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
+        class="bg-gray-200 text-green-700 text-xs font-bold rounded-full absolute top-0 ml-2 mt-2 px-2 py-1 text-base"
       >
-        <span>{{ estate.purpose }}</span>
+        <span v-if="estate.purpose === 'for rent'">Rent</span>
+        <span v-else-if="estate.purpose === 'for sale'">Sale</span>
       </div>
-      <div class="flex justify-between">
-        <span v-if="estate.Price" class="block">{{ estate.Price }} {{ estate.Currency }}</span>
+      <div class="flex justify-between px-3">
+        <span v-if="estate.Price" class="block text-base text-black  text-2xl"
+          >{{ estate.Price }} {{ estate.Currency }}</span
+        >
         <button
           @click="displayDetails(estate)"
-          class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm block text-white"
+          class="float-right bg-yellow-500 px-3 py-2 rounded-full font-bold text-sm block text-white text-base"
         >
           Details
         </button>

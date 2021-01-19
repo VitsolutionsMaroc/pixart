@@ -2,7 +2,6 @@
   <div class="modal-wrapper rapperTour p-4">
     <div class="modal-container h-auto containerTour">
       <!--<vue-englishdatepicker />-->
-      <date-pick v-model="date"></date-pick>
       <p class="italic text-gray-400 my-2">
         <span class="w-2 h-2 bg-yellow-500"></span
         ><span
