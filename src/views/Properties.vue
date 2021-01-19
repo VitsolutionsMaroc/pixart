@@ -1,313 +1,321 @@
 <template>
-  <div class="">
-    <div class="header"></div>
-    <div class="main px-12 md:px-40 ">
-      <div class="RentBuy flex justify-center mt-6 float-left mb-2">
-        <button
-          class="border-2 px-7 p-1 text-black"
-          @click="togglePurpose()"
-          :class="{
-            'bg-yellow-500 border-yellow-500': filters.purpose == 'for sale',
-          }"
-        >
-          Buy
-        </button>
-        <button
-          class="border-2 px-5 p-1 text-black"
-          @click="togglePurpose()"
-          :class="{
-            'bg-yellow-500 border-yellow-500': filters.purpose == 'for rent',
-          }"
-        >
-          Rental
-        </button>
-      </div>
-      <!-- search input -->
-      <div class="flex w-full border-grey-light border mb-2">
-        <button>
-          <span class="w-auto flex justify-end items-center text-grey p-2">
-            <svg
-              class="w-6 h-6 bg-yelleow-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </span>
-        </button>
-        <input
-          class="w-full rounded mr-4"
-          type="text"
-          placeholder="Search..."
-          v-model="filters.keyword"
-          @keyup="getEstates()"
-        />
-      </div>
-      <!-- search input -->
-      <!-- dropdowns -->
-      <div class="flex items-center space-x-3 mb-4 ">
-        <div class="grid md:grid-cols-2  xl:grid-cols-7 xl:gap-4 gap-2">
-          <div class="xl:col-span-2">
-            <multiselect
-              placeholder="categories"
-              label="name"
-              track-by="name"
-              :multiple="true"
-              value="id"
-              v-model="filters.categories"
-              :options="categories"
-              :close-on-select="false"
-              :show-labels="false"
-              :clear-on-select="false"
-            >
-              <div
-                class="selection-count"
-                slot="selection"
-                slot-scope="{ values, search, isOpen, remove }"
-              >
-                <template v-if="!isOpen && values.length">
-                  {{ values.length }} {{ values.length > 1 ? "categories" : "category" }} selected
-                </template>
-              </div>
-              <template slot="option" slot-scope="props">
-                <div class="flex justify-between items-center">
-                  <span>{{ props.option.name }}</span>
-                  <span
-                    v-if="isCategorySelected(props.option.id)"
-                    class="text-right text-sm"
-                  ></span>
-                </div>
-              </template>
-            </multiselect>
-          </div>
-          <div class="xl:col-span-2">
-            <multiselect
-              placeholder="countries"
-              label="name"
-              track-by="name"
-              :multiple="true"
-              value="id"
-              v-model="filters.countries"
-              :options="countries"
-              :close-on-select="false"
-              :show-labels="false"
-              :clear-on-select="false"
-            >
-              <div
-                class="selection-count"
-                slot="selection"
-                slot-scope="{ values, search, isOpen, remove }"
-              >
-                <template v-if="!isOpen && values.length">
-                  {{ values.length }} {{ values.length > 1 ? "categories" : "category" }} selected
-                </template>
-              </div>
-              <template slot="option" slot-scope="props">
-                <div class="flex justify-between items-center">
-                  <span>{{ props.option.name }}</span>
-                  <span v-if="isCountrySelected(props.option.id)" class="text-right text-sm"></span>
-                </div>
-              </template>
-            </multiselect>
-          </div>
-          <div class="grid grid-cols-2 xl:col-span-2">
-            <input
-              type="text"
-              v-model="filters.minPrice"
-              placeholder=" Min Price"
-              class="px-3 py-2 mr-1 border"
-            />
-
-            <input
-              type="text"
-              v-model="filters.maxPrice"
-              placeholder=" Max Price"
-              class="md:px-3 py-2 border"
-            />
-          </div>
-          <div class="grid grid-cols-2 gap-7">
-            <button
-              @click="getEstates()"
-              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
-            >
-              Apply
-            </button>
-            <button
-              @click="messagePopup = !messagePopup"
-              class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
-            >
-              <!--<i class="far fa-plus-circle font-bold text-4xl text-yellow-500"></i>-->
-              More
-            </button>
-          </div>
+  <div class="" style="background:#F7F7F7">
+    <div class="main  px-10">
+      <div class="filters px-60">
+        <div class="RentBuy flex justify-center mt-6 float-left mb-2">
+          <button
+            class="border-2 px-7 p-1 text-black"
+            @click="togglePurpose()"
+            :class="{
+              'bg-yellow-500 border-yellow-500': filters.purpose == 'for sale',
+            }"
+          >
+            Buy
+          </button>
+          <button
+            class="border-2 px-5 p-1 text-black"
+            @click="togglePurpose()"
+            :class="{
+              'bg-yellow-500 border-yellow-500': filters.purpose == 'for rent',
+            }"
+          >
+            Rental
+          </button>
         </div>
-        <!--<extra-filters v-if="popup" @close="popup = false" />-->
-
-        <!-- modal Extra filters -->
-        <div v-if="messagePopup" class="modal-mask w-full">
-          <div class="modal-wrapper">
-            <div class="modal-container md:w-1/2 h-auto">
-              <button
-                class="modal-default-button float-right"
-                @click="messagePopup = !messagePopup"
+        <!-- search input -->
+        <div class="flex w-full border-grey-light border mb-2">
+          <button>
+            <span class="w-auto flex justify-end items-center text-grey p-2">
+              <svg
+                class="w-6 h-6 bg-yelleow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <i class="ml-2 fas fa-times"></i>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </span>
+          </button>
+          <input
+            class="w-full rounded mr-4"
+            type="text"
+            placeholder="Search..."
+            v-model="filters.keyword"
+            @keyup="getEstates()"
+          />
+        </div>
+        <!-- search input -->
+        <!-- dropdowns -->
+        <div class="flex items-center space-x-3 mb-4 ">
+          <div class="grid md:grid-cols-2  xl:grid-cols-7 xl:gap-4 gap-2">
+            <div class="xl:col-span-2">
+              <multiselect
+                placeholder="categories"
+                label="name"
+                track-by="name"
+                :multiple="true"
+                value="id"
+                v-model="filters.categories"
+                :options="categories"
+                :close-on-select="false"
+                :show-labels="false"
+                :clear-on-select="false"
+              >
+                <div
+                  class="selection-count"
+                  slot="selection"
+                  slot-scope="{ values, search, isOpen, remove }"
+                >
+                  <template v-if="!isOpen && values.length">
+                    {{ values.length }} {{ values.length > 1 ? "categories" : "category" }} selected
+                  </template>
+                </div>
+                <template slot="option" slot-scope="props">
+                  <div class="flex justify-between items-center">
+                    <span>{{ props.option.name }}</span>
+                    <span
+                      v-if="isCategorySelected(props.option.id)"
+                      class="text-right text-sm"
+                    ></span>
+                  </div>
+                </template>
+              </multiselect>
+            </div>
+            <div class="xl:col-span-2">
+              <multiselect
+                placeholder="countries"
+                label="name"
+                track-by="name"
+                :multiple="true"
+                value="id"
+                v-model="filters.countries"
+                :options="countries"
+                :close-on-select="false"
+                :show-labels="false"
+                :clear-on-select="false"
+              >
+                <div
+                  class="selection-count"
+                  slot="selection"
+                  slot-scope="{ values, search, isOpen, remove }"
+                >
+                  <template v-if="!isOpen && values.length">
+                    {{ values.length }} {{ values.length > 1 ? "categories" : "category" }} selected
+                  </template>
+                </div>
+                <template slot="option" slot-scope="props">
+                  <div class="flex justify-between items-center">
+                    <span>{{ props.option.name }}</span>
+                    <span
+                      v-if="isCountrySelected(props.option.id)"
+                      class="text-right text-sm"
+                    ></span>
+                  </div>
+                </template>
+              </multiselect>
+            </div>
+            <div class="grid grid-cols-2 xl:col-span-2">
+              <input
+                type="text"
+                v-model="filters.minPrice"
+                placeholder=" Min Price"
+                class="px-3 py-2 mr-1 border"
+              />
+
+              <input
+                type="text"
+                v-model="filters.maxPrice"
+                placeholder=" Max Price"
+                class="md:px-3 py-2 border"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-7">
+              <button
+                @click="getEstates()"
+                class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+              >
+                Apply
               </button>
-              <div class="grid grid-cols-2 gap-8 my-8">
-                <!-- <input
+              <button
+                @click="messagePopup = !messagePopup"
+                class="px-8 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+              >
+                <!--<i class="far fa-plus-circle font-bold text-4xl text-yellow-500"></i>-->
+                More
+              </button>
+            </div>
+          </div>
+          <!--<extra-filters v-if="popup" @close="popup = false" />-->
+
+          <!-- modal Extra filters -->
+          <div v-if="messagePopup" class="modal-mask w-full">
+            <div class="modal-wrapper">
+              <div class="modal-container md:w-1/2 h-auto">
+                <button
+                  class="modal-default-button float-right"
+                  @click="messagePopup = !messagePopup"
+                >
+                  <i class="ml-2 fas fa-times"></i>
+                </button>
+                <div class="grid grid-cols-2 gap-8 my-8">
+                  <!-- <input
                   type="text"
                   v-model="filters.zipcode"
                   placeholder="Zip Code"
                   class="px-3 py-2 border"
                 /> -->
-                <multiselect
-                  placeholder="zipCodes"
-                  label="Zip"
-                  track-by="Zip"
-                  :multiple="true"
-                  value="ZipID"
-                  v-model="filters.zipCodes"
-                  :options="zipCodes"
-                  :close-on-select="false"
-                  :show-labels="false"
-                  :clear-on-select="false"
-                >
-                  <div
-                    class="selection-count"
-                    slot="selection"
-                    slot-scope="{ values, search, isOpen, remove }"
+                  <multiselect
+                    placeholder="zipCodes"
+                    label="Zip"
+                    track-by="Zip"
+                    :multiple="true"
+                    value="ZipID"
+                    v-model="filters.zipCodes"
+                    :options="zipCodes"
+                    :close-on-select="false"
+                    :show-labels="false"
+                    :clear-on-select="false"
                   >
-                    <template v-if="!isOpen && values.length">
-                      {{ values.length }}
-                      {{ values.length > 1 ? "zipCodes" : "zipCode" }} selected
-                    </template>
-                  </div>
-                  <template slot="option" slot-scope="props">
-                    <div class="flex justify-between items-center">
-                      <span>{{ props.option.Zip }}</span>
-                      <span
-                        v-if="isZipCodeSelected(props.option.ZipID)"
-                        class="text-right text-sm"
-                      ></span>
+                    <div
+                      class="selection-count"
+                      slot="selection"
+                      slot-scope="{ values, search, isOpen, remove }"
+                    >
+                      <template v-if="!isOpen && values.length">
+                        {{ values.length }}
+                        {{ values.length > 1 ? "zipCodes" : "zipCode" }} selected
+                      </template>
                     </div>
-                  </template>
-                </multiselect>
-                <!--<input type="text" placeholder="SubCategory" class="px-3 py-2 border" />-->
-                <multiselect
-                  placeholder="subcategories"
-                  label="name"
-                  track-by="name"
-                  :multiple="true"
-                  value="id"
-                  v-model="filters.subcategories"
-                  :options="subcategories"
-                  :close-on-select="false"
-                  :show-labels="false"
-                  :clear-on-select="false"
-                >
-                  <div
-                    class="selection-count"
-                    slot="selection"
-                    slot-scope="{ values, search, isOpen, remove }"
+                    <template slot="option" slot-scope="props">
+                      <div class="flex justify-between items-center">
+                        <span>{{ props.option.Zip }}</span>
+                        <span
+                          v-if="isZipCodeSelected(props.option.ZipID)"
+                          class="text-right text-sm"
+                        ></span>
+                      </div>
+                    </template>
+                  </multiselect>
+                  <!--<input type="text" placeholder="SubCategory" class="px-3 py-2 border" />-->
+                  <multiselect
+                    placeholder="subcategories"
+                    label="name"
+                    track-by="name"
+                    :multiple="true"
+                    value="id"
+                    v-model="filters.subcategories"
+                    :options="subcategories"
+                    :close-on-select="false"
+                    :show-labels="false"
+                    :clear-on-select="false"
                   >
-                    <template v-if="!isOpen && values.length">
-                      {{ values.length }}
-                      {{ values.length > 1 ? "subcategories" : "subcategory" }} selected
-                    </template>
-                  </div>
-                  <template slot="option" slot-scope="props">
-                    <div class="flex justify-between items-center">
-                      <span>{{ props.option.name }}</span>
-                      <span
-                        v-if="isSubCategorySelected(props.option.id)"
-                        class="text-right text-sm"
-                      ></span>
+                    <div
+                      class="selection-count"
+                      slot="selection"
+                      slot-scope="{ values, search, isOpen, remove }"
+                    >
+                      <template v-if="!isOpen && values.length">
+                        {{ values.length }}
+                        {{ values.length > 1 ? "subcategories" : "subcategory" }} selected
+                      </template>
                     </div>
-                  </template>
-                </multiselect>
-                <input
-                  type="text"
-                  v-model="filters.minArea"
-                  placeholder="Min Area"
-                  class="px-3 py-2 border"
-                />
-                <input
-                  type="text"
-                  v-model="filters.maxArea"
-                  placeholder="Max Area"
-                  class="px-3 py-2 border"
-                />
-                <input
-                  type="text"
-                  v-model="filters.rooms"
-                  placeholder="Number rooms"
-                  class="px-3 py-2 border"
-                />
-                <input
-                  type="text"
-                  v-model="filters.bathrooms"
-                  placeholder="Number bathrooms"
-                  class="px-3 py-2 border"
-                />
-              </div>
-              <div class="grid md:grid-cols-4 mb-12">
-                <span
-                  ><label class="m-2"> Parking</label>
+                    <template slot="option" slot-scope="props">
+                      <div class="flex justify-between items-center">
+                        <span>{{ props.option.name }}</span>
+                        <span
+                          v-if="isSubCategorySelected(props.option.id)"
+                          class="text-right text-sm"
+                        ></span>
+                      </div>
+                    </template>
+                  </multiselect>
                   <input
-                    @click="checkParking"
-                    type="checkbox"
-                    value="1"
-                    v-model="filters.parking"
+                    type="text"
+                    v-model="filters.minArea"
+                    placeholder="Min Area"
                     class="px-3 py-2 border"
-                /></span>
-                <span
-                  ><label class="m-2"> Terrace</label>
+                  />
                   <input
-                    type="checkbox"
-                    value="1"
-                    v-model="filters.terrace"
+                    type="text"
+                    v-model="filters.maxArea"
+                    placeholder="Max Area"
                     class="px-3 py-2 border"
-                /></span>
-                <span
-                  ><label class="m-2"> Furnished</label>
+                  />
                   <input
-                    type="checkbox"
-                    value="1"
-                    v-model="filters.furnished"
+                    type="text"
+                    v-model="filters.rooms"
+                    placeholder="Number rooms"
                     class="px-3 py-2 border"
-                /></span>
-                <span
-                  ><label class="m-2"> Garden</label>
-                  <input type="checkbox" value="1" v-model="filters.garden" class="px-3 py-2 border"
-                /></span>
-              </div>
-              <div class="flex justify-end">
-                <button
-                  @click="messagePopup = false"
-                  class="bg-gray-300 px-6 py-2 text-center cursor-pointer mr-2 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  @click="applyExtraFilters()"
-                  class="bg-yellow-500 px-8 py-2 text-center cursor-pointer rounded"
-                >
-                  Apply
-                </button>
+                  />
+                  <input
+                    type="text"
+                    v-model="filters.bathrooms"
+                    placeholder="Number bathrooms"
+                    class="px-3 py-2 border"
+                  />
+                </div>
+                <div class="grid md:grid-cols-4 mb-12">
+                  <span
+                    ><label class="m-2"> Parking</label>
+                    <input
+                      @click="checkParking"
+                      type="checkbox"
+                      value="1"
+                      v-model="filters.parking"
+                      class="px-3 py-2 border"
+                  /></span>
+                  <span
+                    ><label class="m-2"> Terrace</label>
+                    <input
+                      type="checkbox"
+                      value="1"
+                      v-model="filters.terrace"
+                      class="px-3 py-2 border"
+                  /></span>
+                  <span
+                    ><label class="m-2"> Furnished</label>
+                    <input
+                      type="checkbox"
+                      value="1"
+                      v-model="filters.furnished"
+                      class="px-3 py-2 border"
+                  /></span>
+                  <span
+                    ><label class="m-2"> Garden</label>
+                    <input
+                      type="checkbox"
+                      value="1"
+                      v-model="filters.garden"
+                      class="px-3 py-2 border"
+                  /></span>
+                </div>
+                <div class="flex justify-end">
+                  <button
+                    @click="messagePopup = false"
+                    class="bg-gray-300 px-6 py-2 text-center cursor-pointer mr-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    @click="applyExtraFilters()"
+                    class="bg-yellow-500 px-8 py-2 text-center cursor-pointer rounded"
+                  >
+                    Apply
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+          <!-- modal Extra filters -->
         </div>
-        <!-- modal Extra filters -->
+        <!-- dropdowns -->
       </div>
-      <!-- dropdowns -->
 
       <!-- filters -->
       <div class="flex flex-wrap space-x-3 mb-4">
@@ -433,21 +441,30 @@
         </div>
       </div>
       <!-- Filters -->
-      <div class="w-full grid grid-cols-2 bg-gray-200 p-2">
-        <div>Results</div>
-        <div class="flex justify-end">
-          <button @click="activeMap = !activeMap" class="mr-4 cursor-pointer">Map view</button>
-          <span class="mr-4 cursor-pointer">Select</span>
-          <button @click="getEstates()" class="mr-4 cursor-pointer">Update</button>
+      <div class="mx-2 bg-white p-4">
+        <div class="w-full grid grid-cols-2">
+          <div>Results</div>
+          <div class="flex justify-end">
+            <span class="mr-4 cursor-pointer"
+              ><i class="fas fa-check-double text-yellow-500"></i> Select</span
+            >
+            <button @click="getEstates()" class="mr-4 cursor-pointer">
+              <i class="far fa-clock text-yellow-500"></i> Update
+            </button>
+            <button @click="activeMap = !activeMap" class="mr-4 cursor-pointer">
+              Map view
+              <i class="fas fa-toggle-on" style="color:#53D56E"></i>
+            </button>
+          </div>
         </div>
-      </div>
-      <!-- Estate list -->
-      <loader class="px-2 py-10" v-show="loading" />
-      <div :class="activeMap ? 'grid grid-cols-2' : ''">
-        <div v-if="activeMap">
-          <BaseMap />
+        <!-- Estate list -->
+        <loader class="px-2 py-10" v-show="loading" />
+        <div :class="activeMap ? 'grid grid-cols-2' : ''">
+          <div v-if="activeMap">
+            <BaseMap />
+          </div>
+          <Estates :estates="estates" />
         </div>
-        <Estates :estates="estates" />
       </div>
 
       <!-- ./EstateList -->

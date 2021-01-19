@@ -2,6 +2,9 @@
   <div>
     <carousel :perPage="1">
       <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
+        <div>
+          
+        </div>
         <img :src="picture.Url" class="w-full object-cover cursor-pointer" style="height: 400px" />
       </slide>
     </carousel>

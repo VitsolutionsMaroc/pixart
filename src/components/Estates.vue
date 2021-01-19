@@ -1,5 +1,5 @@
 <template>
-  <div class="items mt-8 lg:grid grid-cols-3 gap-16" style="">
+  <div class="items mt-8 grid xl:grid-cols-3 gap-16" style="">
     <div v-for="estate in estates" :key="estate.EstateID" class="relative mb-12">
       <carousel :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
@@ -35,19 +35,21 @@
             {{ estate.Area }}
           </span>
         </span>
-        <span v-if="estate.Price" class="block my-2">{{ estate.Price }} {{ estate.Currency }}</span>
       </div>
       <div
         class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
       >
         <span>{{ estate.purpose }}</span>
       </div>
-      <button
-        @click="displayDetails(estate)"
-        class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm mb-2 block text-white"
-      >
-        Details
-      </button>
+      <div class="flex justify-between">
+        <span v-if="estate.Price" class="block">{{ estate.Price }} {{ estate.Currency }}</span>
+        <button
+          @click="displayDetails(estate)"
+          class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm block text-white"
+        >
+          Details
+        </button>
+      </div>
     </div>
 
     <!-- Estate Modal -->
