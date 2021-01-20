@@ -1,16 +1,32 @@
 <template>
-  <div class="items mt-8 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 text-xl" style="">
-    <div v-for="estate in estates" :key="estate.EstateID" class="relative mb-12">
+  <div
+    :class="
+      activeMap
+        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl'
+        : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3  gap-12 text-xl'
+    "
+    style=""
+  >
+    <div
+      v-for="estate in estates"
+      :key="estate.EstateID"
+      class="estateCard relative mb-12 rounded-md overflow-hidden shadow-lg"
+    >
       <carousel :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
-          <div style="height:400px">
+          <div
+            @click="displayDetails(estate)"
+            class="bgImage"
+            :style="`background-image: url(${picture.Url})`"
+          ></div>
+          <!--<div style="height:400px">
             <img
               :src="picture.Url"
               class="w-full object-cover cursor-pointer"
               style="height:100%"
               @click="displayDetails(estate)"
             />
-          </div>
+          </div>-->
         </slide>
       </carousel>
       <!--<img
@@ -25,15 +41,15 @@
         </h2>
         <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
         <span class="block text-black my-2">
-          <span v-if="estate.Rooms" class="mr-2 md:mr-10">
+          <span v-if="estate.Rooms" class="lg:mr-2 xl:mr-2 md:mr-10">
             <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
           </span>
-          <span v-if="estate.Bathrooms" class="mr-2 md:mr-10">
+          <span v-if="estate.Bathrooms" class="lg:mr-2 xl:mr-2 md:mr-10">
             <i class="fas fa-sink   text-yellow-500"></i>
             {{ estate.Bathrooms }}
           </span>
-          <span v-if="estate.Area" class="mr-2 md:mr-10">
+          <span v-if="estate.Area" class="lg:mr-2 xl:mr-2 md:mr-10">
             <i class="fas fa-ruler-combined  text-yellow-500"></i>
             {{ estate.Area }}
           </span>
@@ -92,7 +108,6 @@ export default {
   },
   methods: {
     displayDetails(estate) {
-      console.log("hererere");
       //this.$modal.hide("estate-details");
       this.selectedEstate = estate;
       this.$modal.show("estate-details");
@@ -100,12 +115,20 @@ export default {
   },
   props: {
     estates: null,
+    activeMap: false,
   },
   name: "estateBlog",
 };
 </script>
 
-<style>
+<style scoped>
+.bgImage {
+  width: 500px;
+  height: 360px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 .multiselect__option--highlight {
   background: #df9523 !important;
 }
@@ -117,5 +140,13 @@ export default {
 }
 .multiselect__option--highlight:after {
   background: #f59e0b !important;
+}
+.estateCard {
+  transition: 0.8s ease;
+  cursor: pointer;
+}
+.estateCard:hover {
+  transform: scale(1.025);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
 }
 </style>

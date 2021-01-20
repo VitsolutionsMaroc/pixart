@@ -2,7 +2,8 @@
   <div>
     <carousel :perPage="1">
       <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
-        <img :src="picture.Url" class="w-full object-cover cursor-pointer" style="height: 400px" />
+        <!--<img :src="picture.Url" class="w-full object-cover cursor-pointer" style="height: 400px" />-->
+        <div class="bgImage" :style="`background-image: url(${picture.Url})`"></div>
       </slide>
     </carousel>
     <div class="flex justify-end px-4 text-yellow-500"><i class="fas fa-plus-square"></i></div>
@@ -314,6 +315,13 @@ export default {
 </script>
 
 <style scoped>
+.bgImage {
+  height: 700px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .bookTour {
   width: 100%;
 }

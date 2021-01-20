@@ -441,29 +441,60 @@
         </div>
       </div>
       <!-- Filters -->
-      <div class="mx-2 bg-white p-4">
+      <div class=" p-4 xl:px-60">
         <div class="w-full grid grid-cols-2">
           <div class="text-xl">Results</div>
           <div class="flex justify-end">
             <span class="mr-6 cursor-pointer text-xl"
               ><i class="fas fa-check-double text-yellow-500"></i> Select</span
             >
-            <button @click="getEstates()" class="mr-6 cursor-pointer text-xl">
-              <i class="far fa-clock text-yellow-500"></i> Update
-            </button>
-            <button @click="activeMap = !activeMap" class="mr-4 cursor-pointer text-xl">
+            <div class="dropdown">
+              <button @click="getEstates()" class="mr-6 cursor-pointer text-xl">
+                <i class="far fa-clock text-yellow-500"></i> Update
+              </button>
+              <div class="dropdown-content">
+                <a href="#">Price</a>
+                <a href="#">Date</a>
+              </div>
+            </div>
+            <!-- -->
+
+            <!-- -->
+            <button
+              @click="activeMap = !activeMap"
+              class="mr-4 cursor-pointer text-xl text-yellow-500"
+            >
               Map view
-              <i class="fas fa-toggle-on" style="color:#53D56E"></i>
             </button>
+            <!-- test -->
+            <div class="panel panel-default ">
+              <div class="panel-body">
+                <!--Only code you need is this label-->
+                <label class="switch">
+                  <input type="checkbox" @click="toggleCheckbox" />
+                  <div class="slider round"></div>
+                </label>
+              </div>
+            </div>
+            <!-- test -->
           </div>
         </div>
+
+        <!--<div id="example-2">
+          <button @click="show = !show">Permuter l'affichage</button>
+          <transition name="bounce">
+            <div v-if="show" class="bg-red-500 w-32 h-16 z-50">
+              hello from ordering
+            </div>
+          </transition>
+        </div>-->
         <!-- Estate list -->
         <loader class="px-2 py-10" v-show="loading" />
         <div :class="activeMap ? 'grid grid-cols-2' : ''">
           <div v-if="activeMap">
             <BaseMap />
           </div>
-          <Estates :estates="estates" />
+          <Estates :activeMap="activeMap" :estates="estates" />
         </div>
       </div>
 
@@ -508,6 +539,10 @@ export default {
   data() {
     return {
       loading: false,
+      checkbox: false,
+      message: false,
+      show: true,
+      grid: "",
       filters: {
         keyword: "",
         purpose: "for rent",
@@ -548,7 +583,12 @@ export default {
     },
   },
   methods: {
-    checkParking() {},
+    toggleCheckbox() {
+      this.checkbox = !this.checkbox;
+      this.$emit("setCheckboxVal", this.checkbox);
+      this.activeMap = !this.activeMap;
+    },
+    gridClass() {},
     togglePurpose() {
       this.filters.purpose = this.filters.purpose == "for rent" ? "for sale" : "for rent";
       this.getEstates();
@@ -853,5 +893,122 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 25px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d2eade;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #39d47a;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #101010;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dropbtn {
+  background-color: #4caf50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
 }
 </style>
