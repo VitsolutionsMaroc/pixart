@@ -2,8 +2,8 @@
   <div
     :class="
       activeMap
-        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl'
-        : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3  gap-12 text-xl'
+        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-2'
+        : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3 md:gap-4  lg:gap-10 text-xl'
     "
     style=""
   >
@@ -34,13 +34,15 @@
         :src="estate.mainPicture"
         class="w-full h-56 object-cover cursor-pointer"
       />-->
-      <div class="h-32 p-3 mb-12">
+      <!--{{ username.substring(0, 8) + ".." }}-->
+      <div class="h-32 p-3 mb-2">
         <h2 class="font-bold my-2">
-          {{ estate.Name }} <span v-if="estate.Name && estate.categoryName">-</span>
+          {{ estate.Name }}
+          <span v-if="estate.Name && estate.categoryName">-</span>
           {{ estate.categoryName }}
         </h2>
-        <span class="my-2">{{ estate.City }} - {{ estate.countryName }}</span>
-        <span class="block text-black my-2">
+        <span class="">{{ estate.City }} - {{ estate.countryName }}</span>
+        <span class="block text-black my-2 mt-6">
           <span v-if="estate.Rooms" class="lg:mr-2 xl:mr-2 md:mr-10">
             <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
@@ -61,13 +63,13 @@
         <span v-if="estate.purpose === 'for rent'">Rent</span>
         <span v-else-if="estate.purpose === 'for sale'">Sale</span>
       </div>
-      <div class="flex justify-between px-3">
+      <div class="flex justify-between px-3 mt-10 py-1">
         <span v-if="estate.Price" class="block text-base text-black  text-2xl"
           >{{ estate.Price }} {{ estate.Currency }}</span
         >
         <button
           @click="displayDetails(estate)"
-          class="float-right bg-yellow-500 px-3 py-2 rounded-full font-bold text-sm block text-white text-base"
+          class="bg-yellow-500 px-3 py-2 rounded-full font-bold text-sm block text-white text-base float-right"
         >
           Details
         </button>

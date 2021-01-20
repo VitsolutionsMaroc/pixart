@@ -449,7 +449,7 @@
               ><i class="fas fa-check-double text-yellow-500"></i> Select</span
             >
             <div class="dropdown">
-              <button @click="getEstates()" class="mr-6 cursor-pointer text-xl">
+              <button class="mr-6 cursor-pointer text-xl">
                 <i class="far fa-clock text-yellow-500"></i> Update
               </button>
               <div class="dropdown-content">

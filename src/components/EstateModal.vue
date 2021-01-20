@@ -6,7 +6,6 @@
         <div class="bgImage" :style="`background-image: url(${picture.Url})`"></div>
       </slide>
     </carousel>
-    <div class="flex justify-end px-4 text-yellow-500"><i class="fas fa-plus-square"></i></div>
     <div class="p-4" style="overflow-y: scroll; max-height: 400px;">
       <div class="grid grid-cols-2 mt-4 mb-4">
         <div class="section">
