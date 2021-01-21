@@ -3,20 +3,20 @@
     :class="
       activeMap
         ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-2'
-        : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3 md:gap-4  lg:gap-10 text-xl'
+        : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4  lg:gap-10 text-xl'
     "
     style=""
   >
     <div
       v-for="estate in estates"
       :key="estate.EstateID"
-      class="estateCard relative mb-12 rounded-md overflow-hidden shadow-lg"
+      class="estateCard relative mb-12 overflow-hidden shadow-md"
     >
-      <carousel :paginationEnabled="false" :perPage="1">
+      <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
           <div
             @click="displayDetails(estate)"
-            class="bgImage"
+            class="bgImage h-48 md:h-72"
             :style="`background-image: url(${picture.Url})`"
           ></div>
           <!--<div style="height:400px">
@@ -35,14 +35,17 @@
         class="w-full h-56 object-cover cursor-pointer"
       />-->
       <!--{{ username.substring(0, 8) + ".." }}-->
-      <div class="h-32 p-3 mb-2">
-        <h2 class="font-bold my-2">
-          {{ estate.Name }}
-          <span v-if="estate.Name && estate.categoryName">-</span>
-          {{ estate.categoryName }}
+      <div class="h-40 p-3 mb-2 border border-2">
+        <h2 class="font-bold text-sm md:text-base lg:text-sm">
+          <span v-if="estate.Name">{{ estate.Name.substring(0, 18) + " .. " }}</span>
+          <span class="u-font-family-system-ui" v-if="estate.Name && estate.categoryName">/</span>
+          {{ estate.categoryName.charAt(0).toUpperCase() + estate.categoryName.slice(1) }}
         </h2>
-        <span class="">{{ estate.City }} - {{ estate.countryName }}</span>
-        <span class="block text-black my-2 mt-6">
+        <span class="text-xs text-gray-400 sm:leading-tight mb-12" v-if="estate.Description">{{
+          estate.Description.substring(0, 100) + " .. "
+        }}</span>
+        <!--<span class="">{{ estate.City }} - {{ estate.countryName }}</span>-->
+        <span class="block text-black text-sm md:text-base my-2">
           <span v-if="estate.Rooms" class="lg:mr-2 xl:mr-2 md:mr-10">
             <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
@@ -63,13 +66,15 @@
         <span v-if="estate.purpose === 'for rent'">Rent</span>
         <span v-else-if="estate.purpose === 'for sale'">Sale</span>
       </div>
-      <div class="flex justify-between px-3 mt-10 py-1">
-        <span v-if="estate.Price" class="block text-base text-black  text-2xl"
+      <div class="flex justify-between px-3 py-1 border border-2 border-t-0">
+        <span
+          v-if="estate.Price"
+          class="block text-base text-black text-base md:text-lg xl:text-xl font-bold align-middle"
           >{{ estate.Price }} {{ estate.Currency }}</span
         >
         <button
           @click="displayDetails(estate)"
-          class="bg-yellow-500 px-3 py-2 rounded-full font-bold text-sm block text-white text-base float-right"
+          class="bg-yellow-500 px-3 py-2 rounded-full font-bold text-xs block text-white md:text-base float-right"
         >
           Details
         </button>
@@ -114,6 +119,9 @@ export default {
       this.selectedEstate = estate;
       this.$modal.show("estate-details");
     },
+    displayName() {
+      this.estate.Name.substring(1, 2);
+    },
   },
   props: {
     estates: null,
@@ -124,9 +132,13 @@ export default {
 </script>
 
 <style scoped>
+html {
+  font-family: serif;
+}
+h2 {
+  color: #676360;
+}
 .bgImage {
-  width: 500px;
-  height: 360px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -148,7 +160,7 @@ export default {
   cursor: pointer;
 }
 .estateCard:hover {
-  transform: scale(1.025);
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+  transform: scale(1.01);
+  box-shadow: 5px 5px 5px #ddd;
 }
 </style>

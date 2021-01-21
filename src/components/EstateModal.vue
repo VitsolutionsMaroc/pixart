@@ -6,7 +6,7 @@
         <div class="bgImage" :style="`background-image: url(${picture.Url})`"></div>
       </slide>
     </carousel>
-    <div class="p-4" style="overflow-y: scroll; max-height: 400px;">
+    <div class="p-4" style="overflow-y: scroll; max-height: 300px;">
       <div class="grid grid-cols-2 mt-4 mb-4">
         <div class="section">
           <span class="my-2"> {{ estate.Name }} </span>
@@ -315,7 +315,7 @@ export default {
 
 <style scoped>
 .bgImage {
-  height: 700px;
+  height: 600px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

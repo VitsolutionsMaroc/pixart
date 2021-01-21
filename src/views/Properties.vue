@@ -1,8 +1,8 @@
 <template>
   <div class="" style="background:#F7F7F7">
     <div class="main  px-10">
-      <div class="filters lg:px-60">
-        <div class="RentBuy flex justify-center mt-6 float-left mb-2">
+      <div class="filters md:px-40">
+        <div class="RentBuy flex justify-start mt-6 mb-2">
           <button
             class="border-2 px-7 p-1 text-black"
             @click="togglePurpose()"
@@ -23,7 +23,8 @@
           </button>
         </div>
         <!-- search input -->
-        <div class="flex w-full border-grey-light border mb-2 bg-white">
+
+        <div class="flex xl:w-11/12 border-grey-light border mb-2 bg-white block">
           <button>
             <span class="w-auto flex justify-end items-center text-grey p-2">
               <svg
@@ -53,7 +54,7 @@
         <!-- search input -->
         <!-- dropdowns -->
         <div class="flex items-center space-x-3 mb-4 ">
-          <div class="grid md:grid-cols-2  xl:grid-cols-7 xl:gap-4 gap-2">
+          <div class="grid md:grid-cols-2  xl:grid-cols-7 xl:gap-3 gap-2">
             <div class="xl:col-span-2">
               <multiselect
                 placeholder="categories"
@@ -135,16 +136,16 @@
                 class="md:px-3 py-2 border"
               />
             </div>
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-4">
               <button
                 @click="getEstates()"
-                class="px-6 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+                class="py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
               >
                 Apply
               </button>
               <button
                 @click="messagePopup = !messagePopup"
-                class="px-6 py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
+                class=" py-2 border-yellow-500 text-white bg-yellow-500 font-bold"
               >
                 <!--<i class="far fa-plus-circle font-bold text-4xl text-yellow-500"></i>-->
                 More
@@ -318,7 +319,7 @@
       </div>
 
       <!-- filters -->
-      <div class="flex flex-wrap space-x-3 mb-4">
+      <div class="flex flex-wrap space-x-3 mb-4 px-40">
         <div
           v-for="category in filters.categories"
           @click="clearFilter('categories', 'id', category.id)"
@@ -441,33 +442,43 @@
         </div>
       </div>
       <!-- Filters -->
-      <div class=" p-4 xl:px-60">
-        <div class="w-full grid grid-cols-2">
-          <div class="text-xl">Results</div>
-          <div class="flex justify-end">
-            <span class="mr-6 cursor-pointer text-xl"
-              ><i class="fas fa-check-double text-yellow-500"></i> Select</span
-            >
-            <div class="dropdown">
-              <button class="mr-6 cursor-pointer text-xl">
-                <i class="far fa-clock text-yellow-500"></i> Update
-              </button>
-              <div class="dropdown-content">
-                <a href="#">Price</a>
-                <a href="#">Date</a>
-              </div>
-            </div>
-            <!-- -->
 
-            <!-- -->
+      <div class="p-2">
+        <div class="w-full md:grid grid-cols-2">
+          <div class="xl:text-xl">Results ({{ totalEstates }})</div>
+          <div class="flex md:justify-end sm:mt-2">
+            <!--<span class="mr-6 cursor-pointer xl:text-xl"
+              ><i class="fas fa-check-double text-yellow-500"></i> Select</span
+            >-->
+            <button
+              class="mr-4 md:mr-6 cursor-pointer sm:text-sm md:text-base xl:text-xl"
+              @click="togglesOrderByPrice()"
+            >
+              <span class="text-base xl:text-xl" v-if="filters.sortByPrice == 'asc'"
+                >Price <i class="fas fa-arrow-down text-yellow-500 "></i
+              ></span>
+              <span text-base xl:text-xl v-if="filters.sortByPrice == 'desc'"
+                >Price <i class="fas fa-arrow-up text-yellow-500"></i
+              ></span>
+            </button>
+            <!--<div class="dropdown">-->
+            <button
+              @click="getEstates()"
+              class="mr-3 md:mr-6 cursor-pointer sm:text-sm md:text-base xl:text-xl"
+            >
+              <i class="far fa-clock text-yellow-500"></i> Update
+            </button>
+            <!--<div class="dropdown-content p-4"></div>
+            <!--</div>-->
+
             <button
               @click="activeMap = !activeMap"
-              class="mr-4 cursor-pointer text-xl text-yellow-500"
+              class="md:mr-4 cursor-pointer sm:text-sm md:text-base xl:text-xl text-yellow-500"
             >
               Map view
             </button>
             <!-- test -->
-            <div class="panel panel-default ">
+            <div class="panel panel-default md:text-base">
               <div class="panel-body">
                 <!--Only code you need is this label-->
                 <label class="switch">
@@ -480,14 +491,6 @@
           </div>
         </div>
 
-        <!--<div id="example-2">
-          <button @click="show = !show">Permuter l'affichage</button>
-          <transition name="bounce">
-            <div v-if="show" class="bg-red-500 w-32 h-16 z-50">
-              hello from ordering
-            </div>
-          </transition>
-        </div>-->
         <!-- Estate list -->
         <loader class="px-2 py-10" v-show="loading" />
         <div :class="activeMap ? 'grid grid-cols-2' : ''">
@@ -562,8 +565,11 @@ export default {
         furnished: false,
         terrace: false,
         parking: false,
+        desc: false,
+        sortByPrice: "asc",
       },
       estates: [],
+      totalEstates: 0,
       pagination: null,
       page: 1,
       countries: [],
@@ -588,9 +594,12 @@ export default {
       this.$emit("setCheckboxVal", this.checkbox);
       this.activeMap = !this.activeMap;
     },
-    gridClass() {},
     togglePurpose() {
       this.filters.purpose = this.filters.purpose == "for rent" ? "for sale" : "for rent";
+      this.getEstates();
+    },
+    togglesOrderByPrice() {
+      this.filters.sortByPrice = this.filters.sortByPrice == "desc" ? "asc" : "desc";
       this.getEstates();
     },
     paginate(page) {
@@ -618,6 +627,7 @@ export default {
       &terrace=${this.filters.terrace ? 1 : 0}
       &furnished=${this.filters.furnished ? 1 : 0}
       &garden=${this.filters.garden ? 1 : 0}
+      &sort_by_price=${this.filters.sortByPrice}
       &${countriesQueryString}&${categoriesQueryString}&${subcategoriesQueryString}&${zipCodesQueryString}`;
 
       axios
@@ -631,6 +641,7 @@ export default {
             to: response.data.to,
             last_page: response.data.last_page,
           };
+          this.totalEstates = response.data.total;
           this.loading = false;
         })
         .catch((error) => {
@@ -703,7 +714,9 @@ export default {
         case "zipcode":
           this.filters.zipcode = 0;
           break;
-
+        case "desc":
+          this.filters.desc = 0;
+          break;
         default:
           break;
       }
@@ -731,19 +744,10 @@ export default {
     displayExtraFilters(estate) {
       this.popup = !this.popup;
     },
-    test() {
-      this.$router.replace({
-        query: {
-          keyword: "test 33333",
-        },
-      });
-      this.$route.query.keyword = "test 222";
-    },
     filterFromQueryString() {
       let params = this.$route.query;
       if (params.keyword) {
         this.filters.keyword = params.keyword;
-        console.log(params.keyword);
       }
       if (params.countries) {
         this.filters.countries = _.isArray(params.countries)
@@ -756,7 +760,7 @@ export default {
           : _.filter(this.categories, (item) => item.id == params.categories);
       }
       if (params.purpose) {
-        this.filters.purpose = params.purpose;
+        console.log(this.filters.purpose);
         console.log(params.purpose);
       }
     },
@@ -766,6 +770,7 @@ export default {
   },
   watch: {
     "filters.keyword"() {
+      console.log("keyword");
       const newQueryString = {
         countries: _.map(this.filters.countries, "id"),
         categories: _.map(this.filters.categories, "id"),
@@ -779,21 +784,27 @@ export default {
         })
         .catch(() => {});
     },
-    "filters.purpose"() {
-      const newQueryString = {
-        countries: _.map(this.filters.countries, "id"),
-        categories: _.map(this.filters.categories, "id"),
-        keyword: this.filters.keyword,
-        purpose: this.filters.purpose,
-      };
+    "filters.purpose": {
+      deep: true,
+      handler(val) {
+        console.log(val);
+        console.log("From watcher ");
+        const newQueryString = {
+          countries: _.map(this.filters.countries, "id"),
+          categories: _.map(this.filters.categories, "id"),
+          keyword: this.filters.keyword,
+          purpose: this.filters.purpose,
+        };
 
-      this.$router
-        .replace({
-          query: newQueryString,
-        })
-        .catch(() => {});
+        this.$router
+          .replace({
+            query: newQueryString,
+          })
+          .catch(() => {});
+      },
     },
     "filters.countries"() {
+      console.log("country");
       const newQueryString = {
         countries: _.map(this.filters.countries, "id"),
         categories: _.map(this.filters.categories, "id"),
@@ -808,6 +819,7 @@ export default {
         .catch(() => {});
     },
     "filters.categories"() {
+      console.log("cat");
       const newQueryString = {
         countries: _.map(this.filters.countries, "id"),
         categories: _.map(this.filters.categories, "id"),
