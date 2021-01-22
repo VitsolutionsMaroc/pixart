@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: "Fira Sans", sans-serif;
+}
 .VueCarousel-dot-container,
 .VueCarousel-dot-container button {
   margin: 0 !important;
@@ -9,4 +12,25 @@
 .VueCarousel-pagination {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.VueCarousel-navigation-prev {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 5px 10px !important;
+  right: 1% !important;
+}
+.VueCarousel-navigation-next {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 5px 10px !important;
+  right: 1% !important;
+}
+.VueCarousel-navigation--disabled {
+  display: none !important;
 }

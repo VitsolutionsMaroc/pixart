@@ -2,7 +2,7 @@
   <div
     :class="
       activeMap
-        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-2'
+        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-2 h-auto'
         : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4  lg:gap-10 text-xl'
     "
     style=""
@@ -12,11 +12,16 @@
       :key="estate.EstateID"
       class="estateCard relative mb-12 overflow-hidden shadow-md"
     >
-      <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
+      <carousel
+        v-if="estate.pictures"
+        :navigationEnabled="true"
+        :paginationEnabled="false"
+        :perPage="1"
+      >
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
           <div
             @click="displayDetails(estate)"
-            class="bgImage h-48 md:h-72"
+            class="bgImage h-48 md:h-72 bg-white"
             :style="`background-image: url(${picture.Url})`"
           ></div>
           <!--<div style="height:400px">
@@ -116,8 +121,10 @@ export default {
   methods: {
     displayDetails(estate) {
       //this.$modal.hide("estate-details");
-      this.selectedEstate = estate;
-      this.$modal.show("estate-details");
+      // this.selectedEstate = estate;
+      // this.$modal.show("estate-details");
+      // this.$router.push()
+      this.$router.push({ name: "properties.details", params: { estateId: estate.EstateID } });
     },
     displayName() {
       this.estate.Name.substring(1, 2);
@@ -149,6 +156,7 @@ h2 {
 .multiselect__tag {
   background: #df9523 !important;
 }
+
 .multiselect__tag:hover {
   background: #df9523 !important;
 }

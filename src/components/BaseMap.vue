@@ -40,6 +40,10 @@ export default {
       zoom: 12,
     });
 
+    this.map.on("load", function() {
+      this.map.resize();
+    });
+
     if (this.estateCoordinates) {
       this.estateCoordinates.forEach((estate) => {
         var marker = new mapboxgl.Marker().setLngLat([-6.84939, 33.999691]).addTo(this.map);
@@ -59,6 +63,6 @@ export default {
 <style lang="scss" scoped>
 .basemap {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 </style>
