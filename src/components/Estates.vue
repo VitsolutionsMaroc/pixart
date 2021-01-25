@@ -12,18 +12,18 @@
       :key="estate.EstateID"
       class="estateCard relative mb-12 overflow-hidden shadow-md"
     >
-      <carousel
-        v-if="estate.pictures"
-        :navigationEnabled="true"
-        :paginationEnabled="false"
-        :perPage="1"
-      >
+      <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
           <div
+            v-if="picture"
             @click="displayDetails(estate)"
             class="bgImage h-48 md:h-72 bg-white"
             :style="`background-image: url(${picture.Url})`"
           ></div>
+          <div v-else>
+            llll=====================================
+          </div>
+
           <!--<div style="height:400px">
             <img
               :src="picture.Url"
@@ -34,6 +34,7 @@
           </div>-->
         </slide>
       </carousel>
+
       <!--<img
         @click="displayDetails(estate)"
         :src="estate.mainPicture"
@@ -170,5 +171,8 @@ h2 {
 .estateCard:hover {
   transform: scale(1.01);
   box-shadow: 5px 5px 5px #ddd;
+}
+.noImage {
+  background-image: url("../assets/img/avatar.svg");
 }
 </style>

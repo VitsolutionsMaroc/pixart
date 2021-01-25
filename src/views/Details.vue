@@ -1,177 +1,45 @@
 <template>
-  <div class="px-48">
-    <button class="bg-yellow-500 px-4 py-3 text-white mb-2">
+  <div class="xl:px-48">
+    <!--<button class="bg-yellow-500 px-4 py-3 text-white mb-2">
       <i class="fas fa-undo"></i> Back to Properties page
-    </button>
-    <loader class="px-2 py-10" v-if="!estate" />
+    </button>-->
+    <loader class="py-10" v-if="!estate" />
     <div v-else>
-      <div class="grid grid-cols-2">
-        <div>
-          <carousel
-            :navigationEnabled="true"
-            :paginationEnabled="false"
-            :perPage="1"
-            class="bg-green"
-          >
-            <slide
-              v-for="picture in estate.pictures"
-              v-bind:key="picture.PictureID"
-              class="slideDetails flex"
-              style=""
+      <div class="xl:px-16 py-6 grid grid-cols-3 xl:gap-10">
+        <div class="shadow-md col-span-2 p-2">
+          <!-- Slider -->
+          <div>
+            <carousel
+              :navigationEnabled="true"
+              :paginationEnabled="false"
+              :perPage="1"
+              class="bg-green"
             >
-              <img :src="picture.Url" class="mx-auto w-auto h-full cursor-pointer" />
-            </slide>
-          </carousel>
-        </div>
-        <div class="section-right p-4">
-          <span class="my-2">Name : {{ estate.Name }} </span>
-          <span class="my-2"> {{ estate.CategoryName }} </span>
-          <span class="block my-2">{{ estate.Address1 }}</span>
-          <span v-if="estate.Price" class="block my-2">
-            Price : {{ estate.Price }} {{ estate.Currency }}
-          </span>
-
-          <span class="mr-8" v-if="estate.Rooms"
-            ><i class="fas fa-sink mr-2 text-yellow-500"></i> {{ estate.Rooms }}
-          </span>
-          <span class="mr-8" v-if="estate.Bathrooms"
-            ><i class="fas fa-bed mr-2 text-yellow-500"></i> {{ estate.Bathrooms }}</span
-          >
-          <span mr-8>
-            <i class="fas fa-ruler-combined mr-2 text-yellow-500"></i>
-            {{ estate.Area }}
-            <span v-if="estate.Area">m²</span>
-          </span>
-
-          <i class="fas fa-rectangle-wide"></i>
-
-          <div class="relative shadow-2xl bg-white border-gray-200 w-72 h-62 p-4">
-            <div v-if="estate.RepresentativeID != null">
-              <img
-                :src="estate.representativePicture.Url"
-                class="rounded-full h-24 w-24 flex items-center m-auto"
-              />
-
-              <h2 class="mt-2 text-center m-auto">
-                {{ estate.representativeName }}
-                {{ estate.representativeLastName }}
-              </h2>
+              <slide
+                v-for="picture in estate.pictures"
+                v-bind:key="picture.PictureID"
+                class="slideDetails flex"
+                style=""
+              >
+                <img :src="picture.Url" class="mx-auto w-auto h-full cursor-pointer" />
+              </slide>
+            </carousel>
+          </div>
+          <!-- Slider -->
+          <!-- Property details -->
+          <div class="section-right p-4">
+            <div class="font-bold text-xl py-2 mb-8">
+              <span v-if="estate.Price" class="">
+                Price : {{ estate.Price }} {{ estate.Currency }}
+              </span>
+              <span class="float-right" style="color:#39D47A">{{
+                estate.purpose.charAt(0).toUpperCase() + estate.purpose.slice(1)
+              }}</span>
             </div>
-            <button
-              @click="displayContactModal"
-              class="mt-2 text-center m-auto bg-yellow-500 text-white p-2 w-full"
-            >
-              Contact us
-            </button>
-            <v-modal
-              height="auto"
-              :adaptive="true"
-              :min-width="100"
-              :scrollable="true"
-              name="contact"
-            >
-              <contact-modal />
-            </v-modal>
 
-            <v-modal height="auto" :adaptive="true" :min-width="100" :scrollable="true" name="toor">
-              <toor-modal />
-            </v-modal>
-          </div>
-        </div>
-      </div>
-      <!-- description  -->
-      <h2 class="my-2 font-bold text-lg">Description</h2>
-      <p>
-        {{ estate.Description }}
-      </p>
-      <hr />
-      <div class="flex justify-between">
-        <h2 class="my-2 font-bold text-lg">Similar Properties</h2>
-        <button
-          class="my-2 font-bold text-lg"
-          v-show="relatedEstateApiUrl && !loadingRelatedEstates"
-          @click="loadRelatedEstates()"
-        >
-          More related Estates
-        </button>
-      </div>
-      <div class="grid grid-cols-4 gap-4 mb-2">
-        <router-link
-          :to="{ name: 'properties.details', params: { estateId: relatedEstate.EstateID } }"
-          class="relative"
-          v-for="(relatedEstate, index) in relatedEstates"
-          :key="relatedEstate.EstateID + '-' + index"
-        >
-          <carousel :paginationEnabled="false" :perPage="1">
-            <slide v-for="picture in relatedEstate.pictures" v-bind:key="picture.PictureID">
-              <img :src="picture.Url" class="w-full h-56 object-cover cursor-pointer" />
-            </slide>
-          </carousel>
-          <div class="p-2 h-56">
-            <h2 class="font-bold my-2">
-              {{ relatedEstate.Name }} - {{ relatedEstate.categoryName }}
-            </h2>
-            <span class="my-2">{{ relatedEstate.City }} - {{ relatedEstate.countryName }}</span>
-            <div class="text-black grid grid-cols-3">
-              <div v-if="relatedEstate.Rooms">
-                <i class="fas fa-bed mr-2 text-yellow-500"></i>
-                {{ relatedEstate.Rooms }}
-              </div>
-              <div v-if="relatedEstate.Bathrooms">
-                <i class="fas fa-sink mx-2 mr-2 text-yellow-500"></i>
-                {{ relatedEstate.Bathrooms }}
-              </div>
-              <div v-if="relatedEstate.Area">
-                <i class="fas fa-ruler-combined mx-2 text-yellow-500"></i>
-                {{ relatedEstate.Area }}
-              </div>
-            </div>
-          </div>
-          <div
-            class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
-          >
-            <span>{{ relatedEstate.purpose }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span v-if="relatedEstate.Price" class="block"
-              >{{ relatedEstate.Price }} {{ relatedEstate.Currency }}</span
-            >
-            <button
-              class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm block text-white"
-            >
-              Details
-            </button>
-          </div>
-        </router-link>
-        <!--<loader class="px-2 py-10" v-show="loadingRelatedEstates" />-->
-      </div>
-      <!-- description -->
-    </div>
-    <!--<div v-else>
-      <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1" class="bg-green">
-        <slide
-          v-for="picture in estate.pictures"
-          v-bind:key="picture.PictureID"
-          class="bg-red-500 slideDetails flex"
-          style=""
-        >
-          <img
-            :src="picture.Url"
-            class="object-cover cursor-pointer img-responsive w-2/4 place-self-center"
-            style="height:auto"
-          />
-        </slide>
-      </carousel>
-
-      <div class="p-4">
-        <div class="grid grid-cols-2 mt-4 mb-4">
-          <div class="section">
-            <span class="my-2">Name : {{ estate.Name }} </span>
-            <span class="my-2"> {{ estate.CategoryName }} </span>
-            <span class="block my-2">{{ estate.Address1 }}</span>
-            <span v-if="estate.Price" class="block my-2">
-              Price : {{ estate.Price }} {{ estate.Currency }}
-            </span>
+            <span class="my-2 block text-black font-bold text-xl">{{ estate.Name }} </span>
+            <span class="my-2 block"> {{ estate.CategoryName }} </span>
+            <span class="block my-2 text-gray-400">{{ estate.Address1 }}</span>
 
             <span class="mr-8" v-if="estate.Rooms"
               ><i class="fas fa-sink mr-2 text-yellow-500"></i> {{ estate.Rooms }}
@@ -187,116 +55,133 @@
 
             <i class="fas fa-rectangle-wide"></i>
 
+            <h2 class="block text-black font-bold text-xl my-4">Property details</h2>
+            <div class="grid grid-cols-3">
+              <span class="text-gray-600 font-bold mb-1">Parking</span>
+              <span class="text-gray-600 font-bold mb-1">Garage</span>
+              <span class="text-gray-600 font-bold mb-1">Terrace</span>
+              <span v-if="estate.Parking">Yes</span>
+              <span v-else>No</span>
+              <span v-if="estate.Garage">Yes</span>
+              <span v-else>No</span>
+              <span v-if="estate.Terrace">Yes</span>
+              <span v-else>No</span>
+            </div>
+            <div class="grid grid-cols-3">
+              <span class="text-gray-600 font-bold mb-1">Ground Area</span>
+              <span class="text-gray-600 font-bold mb-1">Garden Area</span>
+              <span class="text-gray-600 font-bold mb-1">Purpose</span>
+              <span class="mb-2">{{ estate.GroundArea }}</span>
+              <span class="mb-2">{{ estate.GardenArea }}</span>
+              <span class="mb-2">{{ estate.purpose }}</span>
+            </div>
+
             <h2 class="my-2 font-bold text-lg">Description</h2>
             <p>
               {{ estate.Description }}
             </p>
           </div>
-          <div>
-            <div class="relative float-right shadow-2xl bg-white border-gray-200 w-72 h-62 p-4">
-              <div v-if="estate.RepresentativeID != null">
-                <img
-                  :src="estate.representativePicture.Url"
-                  class="rounded-full h-24 w-24 flex items-center m-auto"
-                />
+          <!-- Property details -->
+          <!-- Related Estates -->
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            <router-link
+              :to="{ name: 'properties.details', params: { estateId: relatedEstate.EstateID } }"
+              class="relative"
+              v-for="(relatedEstate, index) in relatedEstates"
+              :key="relatedEstate.EstateID + '-' + index"
+            >
+              <carousel :paginationEnabled="false" :perPage="1">
+                <slide v-for="picture in relatedEstate.pictures" v-bind:key="picture.PictureID">
+                  <img :src="picture.Url" class="w-full h-56 object-cover cursor-pointer" />
+                </slide>
+              </carousel>
 
-                <h2 class="mt-2 text-center m-auto">
-                  {{ estate.representativeName }}
-                  {{ estate.representativeLastName }}
-                </h2>
+              <div
+                class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
+              >
+                <span>{{ relatedEstate.purpose }}</span>
               </div>
-              <button
-                @click="displayContactModal"
-                class="mt-2 text-center m-auto bg-yellow-500 text-white p-2 w-full"
-              >
-                Contact us
-              </button>
-              <v-modal
-                height="auto"
-                :adaptive="true"
-                :min-width="100"
-                :scrollable="true"
-                name="contact"
-              >
-                <contact-modal />
-              </v-modal>
-
-              <v-modal
-                height="auto"
-                :adaptive="true"
-                :min-width="100"
-                :scrollable="true"
-                name="toor"
-              >
-                <toor-modal />
-              </v-modal>
-            </div>
+              <div class="mt-4 mb-2 truncate">
+                <span v-if="relatedEstate.Price" class="text-black font-bold text-lg"
+                  >{{ relatedEstate.Price }} {{ relatedEstate.Currency }}</span
+                >
+                <button
+                  class="float-right px-2 py-1 rounded-full font-bold text-sm block text-white"
+                  style="background:#fbf0df;color:#df9639"
+                >
+                  Details
+                </button>
+              </div>
+              <h2 class="text-black text-sm font-bold mb-4 block">
+                {{ estate.Name }} <span v-if="estate.Name && estate.Name">-</span>
+                {{ estate.categoryName.charAt(0).toUpperCase() + estate.categoryName.slice(1) }}
+              </h2>
+              <span class="block text-black text-sm md:text-base my-2">
+                <span v-if="estate.Rooms" class="lg:mr-2 xl:mr-2 md:mr-10">
+                  <i class="fas fa-bed  text-yellow-500"></i>
+                  {{ estate.Rooms }}
+                </span>
+                <span v-if="estate.Bathrooms" class="lg:mr-2 xl:mr-2 md:mr-10">
+                  <i class="fas fa-sink   text-yellow-500"></i>
+                  {{ estate.Bathrooms }}
+                </span>
+                <span v-if="estate.Area" class="lg:mr-2 xl:mr-2 md:mr-10">
+                  <i class="fas fa-ruler-combined  text-yellow-500"></i>
+                  {{ estate.Area }}
+                </span>
+              </span>
+            </router-link>
           </div>
-        </div>
-
-        <hr />
-        <div class="flex justify-between">
-          <h2 class="my-2 font-bold text-lg">Similar Properties</h2>
-          <button
-            class="my-2 font-bold text-lg"
+          <loader class=" py-10" v-show="loadingRelatedEstates" />
+          <div
+            class="font-bold mx-auto text-lg text-center my-4 cursor-pointer py-2 w-2/6 rounded-full"
             v-show="relatedEstateApiUrl && !loadingRelatedEstates"
             @click="loadRelatedEstates()"
+            style="background:#fbf0df;color:#df9639"
           >
             More related Estates
-          </button>
+          </div>
+          <!-- Related Estates -->
         </div>
-        <div class="grid grid-cols-4 gap-4">
-          <router-link
-            :to="{ name: 'properties.details', params: { estateId: relatedEstate.EstateID } }"
-            class="relative"
-            v-for="(relatedEstate, index) in relatedEstates"
-            :key="relatedEstate.EstateID + '-' + index"
-          >
-            <carousel :paginationEnabled="false" :perPage="1">
-              <slide v-for="picture in relatedEstate.pictures" v-bind:key="picture.PictureID">
-                <img :src="picture.Url" class="w-full h-56 object-cover cursor-pointer" />
-              </slide>
-            </carousel>
-            <div class="p-2 h-56">
-              <h2 class="font-bold my-2">
-                {{ relatedEstate.Name }} - {{ relatedEstate.categoryName }}
+        <!-- Contact section -->
+        <div class="p-2">
+          <div class="shadow-md xl:p-8 xl:px-10">
+            <div class="xl:flex items-center " v-if="estate.RepresentativeID != null">
+              <img :src="estate.representativePicture.Url" class="rounded-full h-24 w-24 mr-12" />
+
+              <h2 class="text-xl text-gray-400">
+                {{ estate.representativeName }}
+                {{ estate.representativeLastName }}
               </h2>
-              <span class="my-2">{{ relatedEstate.City }} - {{ relatedEstate.countryName }}</span>
-              <div class="text-black grid grid-cols-3">
-                <div v-if="relatedEstate.Rooms">
-                  <i class="fas fa-bed mr-2 text-yellow-500"></i>
-                  {{ relatedEstate.Rooms }}
-                </div>
-                <div v-if="relatedEstate.Bathrooms">
-                  <i class="fas fa-sink mx-2 mr-2 text-yellow-500"></i>
-                  {{ relatedEstate.Bathrooms }}
-                </div>
-                <div v-if="relatedEstate.Area">
-                  <i class="fas fa-ruler-combined mx-2 text-yellow-500"></i>
-                  {{ relatedEstate.Area }}
-                </div>
-              </div>
             </div>
-            <div
-              class="bg-gray-200 text-green-700 text-xs font-bold rounded-full p-2 absolute top-0 ml-2 mt-2"
+            <div class="xl:flex items-center mb-2" v-else>
+              <img src="../assets/img/avatar.svg" class="rounded-full h-24 items-center" />
+
+              <span class="text-xl text-gray-400">
+                Pixart User
+              </span>
+            </div>
+            <button
+              @click="displayContactModal"
+              class="mt-6 text-center m-auto text-white p-2 py-4 w-full text-lg font-bold"
+              style="background:#fbf0df;color:#df9639"
             >
-              <span>{{ relatedEstate.purpose }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span v-if="relatedEstate.Price" class="block"
-                >{{ relatedEstate.Price }} {{ relatedEstate.Currency }}</span
-              >
-              <button
-                class="float-right bg-yellow-500 px-2 py-1 rounded-full font-bold text-sm block text-white"
-              >
-                Details
-              </button>
-            </div>
-          </router-link>
-          <loader class="px-2 py-10" v-show="loadingRelatedEstates" />
+              Contact us
+            </button>
+          </div>
+          <v-modal
+            height="auto"
+            :adaptive="true"
+            :min-width="100"
+            :scrollable="true"
+            name="contact"
+          >
+            <contact-modal />
+          </v-modal>
         </div>
+        <!-- Contact section -->
       </div>
-    </div>-->
+    </div>
   </div>
 </template>
 
