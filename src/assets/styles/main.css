@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .VueCarousel-dot-container,
 .VueCarousel-dot-container button {
@@ -13,7 +13,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.VueCarousel-navigation-prev {
+/*.VueCarousel-navigation-prev {
   transform: scaleY(1) !important;
   background-color: #f59e0b !important;
   opacity: 1;
@@ -32,5 +32,68 @@
   right: 1% !important;
 }
 .VueCarousel-navigation--disabled {
+  display: none !important;
+}*/
+
+.VueCarousel-navigation-button[data-v-453ad8cd]:focus {
+  outline: none !important;
+}
+.sliderDetails .VueCarousel-navigation-next[data-v-453ad8cd] {
+  transform: scaleY(1.5) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+
+  padding: 6px 10px !important;
+}
+.sliderDetails .VueCarousel-navigation-prev[data-v-453ad8cd] {
+  transform: scaleY(1.5) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+
+  padding: 6px 10px !important;
+}
+.sliderDetails .VueCarousel-navigation--disabled {
+  opacity: 0.5 !important;
+}
+/*@media (min-width: 640px) {
+  .VueCarousel-navigation-next[data-v-453ad8cd] {
+    transform: scaleY(1.5) !important;
+    background-color: #f59e0b !important;
+    opacity: 1;
+    color: #fff !important;
+
+    padding: 6px 10px !important;
+    display: none !important;
+  }
+  .VueCarousel-navigation-prev[data-v-453ad8cd] {
+    transform: scaleY(1.5) !important;
+    background-color: #f59e0b !important;
+    opacity: 1;
+    color: #fff !important;
+
+    padding: 6px 10px !important;
+  }
+}*/
+.estateCard .VueCarousel-navigation-next[data-v-453ad8cd] {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  font-size: 10px !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 2px 10px !important;
+}
+.estateCard .VueCarousel-navigation-prev[data-v-453ad8cd] {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  font-size: 10px !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 2px 10px !important;
+}
+.estateCard .VueCarousel-navigation--disabled {
   display: none !important;
 }

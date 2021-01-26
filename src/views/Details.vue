@@ -1,14 +1,55 @@
 <template>
   <div class="xl:px-48">
-    <!--<button class="bg-yellow-500 px-4 py-3 text-white mb-2">
-      <i class="fas fa-undo"></i> Back to Properties page
-    </button>-->
     <loader class="py-10" v-if="!estate" />
     <div v-else>
-      <div class="xl:px-16 py-6 grid grid-cols-3 xl:gap-10">
-        <div class="shadow-md col-span-2 p-2">
+      <div class="xl:px-16 py-6 grid md:grid-cols-3 xl:gap-10">
+        <!-- Contact section -->
+        <div class="p-4 md:p-2">
+          <div class="shadow-md xl:p-8 xl:px-10 p-2">
+            <div class="flex items-center" v-if="estate.RepresentativeID != null">
+              <img
+                :src="estate.representativePicture.Url"
+                class="rounded-full h-12 w-12 mr-6 xl:h-24 xl:w-24 lg:h-20 lg:w-20 md:h-16 md:w-16  lg:mr-12 md:mr-4"
+              />
+
+              <div class="text-gray-400 xl:text-xl md:text-sm">
+                {{ estate.representativeName }}
+                {{ estate.representativeLastName }}
+              </div>
+            </div>
+            <div class="flex items-center" v-else>
+              <img
+                src="../assets/img/avatar.svg"
+                class="rounded-full h-12 w-12 mr-6 xl:h-24 xl:w-24 lg:h-20 lg:w-20 md:h-16 md:w-16  lg:mr-12 md:mr-4"
+              />
+
+              <span class="text-gray-400 xl:text-xl md:text-base">
+                Pixart User
+              </span>
+            </div>
+            <button
+              @click="displayContactModal"
+              class="mt-6 text-center m-auto text-white p-2 py-4 w-full text-lg font-bold"
+              style="background:#fbf0df;color:#df9639"
+            >
+              Contact us
+            </button>
+          </div>
+          <v-modal
+            height="auto"
+            :adaptive="true"
+            :min-width="100"
+            :scrollable="true"
+            name="contact"
+          >
+            <contact-modal />
+          </v-modal>
+        </div>
+        <!-- Contact section -->
+
+        <div class="shadow-md md:col-span-2 p-2">
           <!-- Slider -->
-          <div>
+          <div class="sliderDetails">
             <carousel
               :navigationEnabled="true"
               :paginationEnabled="false"
@@ -32,51 +73,63 @@
               <span v-if="estate.Price" class="">
                 Price : {{ estate.Price }} {{ estate.Currency }}
               </span>
-              <span class="float-right" style="color:#39D47A">{{
-                estate.purpose.charAt(0).toUpperCase() + estate.purpose.slice(1)
-              }}</span>
+              <span class="float-right capitalize" style="color:#39D47A">{{ estate.purpose }}</span>
             </div>
 
             <span class="my-2 block text-black font-bold text-xl">{{ estate.Name }} </span>
             <span class="my-2 block"> {{ estate.CategoryName }} </span>
             <span class="block my-2 text-gray-400">{{ estate.Address1 }}</span>
 
-            <span class="mr-8" v-if="estate.Rooms"
-              ><i class="fas fa-sink mr-2 text-yellow-500"></i> {{ estate.Rooms }}
-            </span>
-            <span class="mr-8" v-if="estate.Bathrooms"
-              ><i class="fas fa-bed mr-2 text-yellow-500"></i> {{ estate.Bathrooms }}</span
-            >
-            <span mr-8>
-              <i class="fas fa-ruler-combined mr-2 text-yellow-500"></i>
-              {{ estate.Area }}
-              <span v-if="estate.Area">m²</span>
-            </span>
-
-            <i class="fas fa-rectangle-wide"></i>
-
-            <h2 class="block text-black font-bold text-xl my-4">Property details</h2>
             <div class="grid grid-cols-3">
-              <span class="text-gray-600 font-bold mb-1">Parking</span>
-              <span class="text-gray-600 font-bold mb-1">Garage</span>
-              <span class="text-gray-600 font-bold mb-1">Terrace</span>
-              <span v-if="estate.Parking">Yes</span>
-              <span v-else>No</span>
-              <span v-if="estate.Garage">Yes</span>
-              <span v-else>No</span>
-              <span v-if="estate.Terrace">Yes</span>
-              <span v-else>No</span>
+              <span v-if="estate.Rooms"
+                ><i class="fas fa-sink mr-2 text-yellow-500"></i> {{ estate.Rooms }}
+              </span>
+              <span v-if="estate.Bathrooms">
+                <i class="fas fa-bed mr-2 text-yellow-500"></i> {{ estate.Bathrooms }}
+              </span>
+              <span v-if="estate.Area">
+                <i class="fas fa-ruler-combined mr-2 text-yellow-500"></i>
+                {{ estate.Area }} m²
+                <i class="fas fa-rectangle-wide"></i>
+              </span>
             </div>
-            <div class="grid grid-cols-3">
+
+            <h2 class="block text-black font-bold md:text-xl my-4">Property details</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 mb-2">
+              <div>
+                <span class="text-gray-600 font-bold mb-1 block">Parking</span>
+                <span v-if="estate.Parking">Yes</span>
+                <span v-else>No</span>
+              </div>
+              <div>
+                <span class="text-gray-600 font-bold mb-1 block">Garage</span>
+                <span v-if="estate.Garage">Yes</span>
+                <span v-else>No</span>
+              </div>
+              <div>
+                <span class="text-gray-600 font-bold mb-1 block">Terrace</span>
+                <span v-if="estate.Terrace">Yes</span>
+                <span v-else>No</span>
+              </div>
+              <div>
+                <span class="text-gray-600 font-bold mb-1 block">Furnished</span>
+                <span v-if="estate.Furnished">Yes</span>
+                <span v-else>No</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-2">
               <span class="text-gray-600 font-bold mb-1">Ground Area</span>
               <span class="text-gray-600 font-bold mb-1">Garden Area</span>
-              <span class="text-gray-600 font-bold mb-1">Purpose</span>
-              <span class="mb-2">{{ estate.GroundArea }}</span>
-              <span class="mb-2">{{ estate.GardenArea }}</span>
-              <span class="mb-2">{{ estate.purpose }}</span>
+              <div class="mb-2">
+                {{ estate.GroundArea }}<span v-if="estate.GroundArea"> m²</span>
+              </div>
+
+              <div class="mb-2">
+                {{ estate.GardenArea }} <span v-if="estate.GroundArea"> m²</span>
+              </div>
             </div>
 
-            <h2 class="my-2 font-bold text-lg">Description</h2>
+            <h2 class="my-2 font-bold text-lg" v-if="estate.Description">Description</h2>
             <p>
               {{ estate.Description }}
             </p>
@@ -132,9 +185,9 @@
               </span>
             </router-link>
           </div>
-          <loader class=" py-10" v-show="loadingRelatedEstates" />
+          <loader class="py-10" v-show="loadingRelatedEstates" />
           <div
-            class="font-bold mx-auto text-lg text-center my-4 cursor-pointer py-2 w-2/6 rounded-full"
+            class="font-bold mx-auto text-sm md:text-lg text-center my-4 cursor-pointer py-2 w-2/4 md:w-2/6 rounded-full"
             v-show="relatedEstateApiUrl && !loadingRelatedEstates"
             @click="loadRelatedEstates()"
             style="background:#fbf0df;color:#df9639"
@@ -143,43 +196,6 @@
           </div>
           <!-- Related Estates -->
         </div>
-        <!-- Contact section -->
-        <div class="p-2">
-          <div class="shadow-md xl:p-8 xl:px-10">
-            <div class="xl:flex items-center " v-if="estate.RepresentativeID != null">
-              <img :src="estate.representativePicture.Url" class="rounded-full h-24 w-24 mr-12" />
-
-              <h2 class="text-xl text-gray-400">
-                {{ estate.representativeName }}
-                {{ estate.representativeLastName }}
-              </h2>
-            </div>
-            <div class="xl:flex items-center mb-2" v-else>
-              <img src="../assets/img/avatar.svg" class="rounded-full h-24 items-center" />
-
-              <span class="text-xl text-gray-400">
-                Pixart User
-              </span>
-            </div>
-            <button
-              @click="displayContactModal"
-              class="mt-6 text-center m-auto text-white p-2 py-4 w-full text-lg font-bold"
-              style="background:#fbf0df;color:#df9639"
-            >
-              Contact us
-            </button>
-          </div>
-          <v-modal
-            height="auto"
-            :adaptive="true"
-            :min-width="100"
-            :scrollable="true"
-            name="contact"
-          >
-            <contact-modal />
-          </v-modal>
-        </div>
-        <!-- Contact section -->
       </div>
     </div>
   </div>
@@ -213,7 +229,7 @@ export default {
       estate: null,
       loadingRelatedEstates: false,
       relatedEstates: [],
-      relatedEstateApiUrl: `http://localhost:8000/api/estates/${this.$route.params.estateId}/related-estates`,
+      relatedEstateApiUrl: `https://apivitexport.azurewebsites.net/api/estates/${this.$route.params.estateId}/related-estates`,
       bookTour: false,
       date: "2019-01-01",
       picSwiper: null,
@@ -319,7 +335,7 @@ export default {
     loadEstate() {
       let estateId = this.$route.params.estateId;
       axios
-        .get(`http://localhost:8000/api/estates/${estateId}`)
+        .get(`https://apivitexport.azurewebsites.net/api/estates/${estateId}`)
         .then((response) => {
           this.estate = response.data;
         })
@@ -365,7 +381,7 @@ export default {
     "$route.params": {
       handler(params) {
         this.loadEstate();
-        this.relatedEstateApiUrl = `http://localhost:8000/api/estates/${params.estateId}/related-estates`;
+        this.relatedEstateApiUrl = `https://apivitexport.azurewebsites.net/api/estates/${params.estateId}/related-estates`;
         this.relatedEstates = [];
         this.loadRelatedEstates();
       },
@@ -403,4 +419,25 @@ export default {
   max-width: 100%;
   height: auto;
 }
+/*.VueCarousel-navigation-prev {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 5px 10px !important;
+  right: 1% !important;
+}
+.VueCarousel-navigation-next {
+  transform: scaleY(1) !important;
+  background-color: #f59e0b !important;
+  opacity: 1;
+  color: #fff !important;
+  border-radius: 50% !important;
+  padding: 5px 10px !important;
+  right: 1% !important;
+}
+.VueCarousel-navigation--disabled {
+  display: none !important;
+}*/
 </style>

@@ -2,7 +2,7 @@
   <div class="" style="background:#F7F7F7">
     <div class="main  px-10">
       <div class="filters md:px-40">
-        <div class="RentBuy flex justify-start mt-6 mb-2">
+        <div class="RentBuy flex justify-start mb-2">
           <button
             class="border-2 px-7 p-1 text-black"
             @click="togglePurpose()"

@@ -2,7 +2,7 @@
   <div
     :class="
       activeMap
-        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-2 h-auto'
+        ? 'items mt-8 grid md:grid-cols-2  gap-12 text-xl md:gap-6 h-auto'
         : 'items mt-8 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4  lg:gap-10 text-xl'
     "
     style=""
@@ -14,14 +14,12 @@
     >
       <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
-          <div
-            v-if="picture"
-            @click="displayDetails(estate)"
-            class="bgImage h-48 md:h-72 bg-white"
-            :style="`background-image: url(${picture.Url})`"
-          ></div>
-          <div v-else>
-            llll=====================================
+          <div>
+            <div
+              @click="displayDetails(estate)"
+              class="bgImage h-48 md:h-72 bg-white"
+              :style="`background-image: url(${picture.Url})`"
+            ></div>
           </div>
 
           <!--<div style="height:400px">
@@ -33,6 +31,15 @@
             />
           </div>-->
         </slide>
+        <slide v-if="!estate.pictures || estate.pictures == 0">
+          <div>
+            <div
+              @click="displayDetails(estate)"
+              class="bgImage h-48 md:h-72 bg-white"
+              style="background-image: url('localhost:8080/assets/img/notavailable.png')"
+            ></div>
+          </div>
+        </slide>
       </carousel>
 
       <!--<img
@@ -41,49 +48,45 @@
         class="w-full h-56 object-cover cursor-pointer"
       />-->
       <!--{{ username.substring(0, 8) + ".." }}-->
-      <div class="h-40 p-3 mb-2 border border-2">
-        <h2 class="font-bold text-sm md:text-base lg:text-sm">
-          <span v-if="estate.Name">{{ estate.Name.substring(0, 18) + " .. " }}</span>
-          <span class="u-font-family-system-ui" v-if="estate.Name && estate.categoryName">/</span>
+      <div class="h-36 p-3">
+        <div class="mt-4 xl:mb-4 truncate">
+          <span v-if="estate.Price" class="text-black font-bold text-lg"
+            >{{ estate.Price }} {{ estate.Currency }}</span
+          >
+          <button
+            @click="displayDetails(estate)"
+            class="float-right px-2 py-1 rounded-full font-bold text-sm block text-white"
+            style="background:#fbf0df;color:#df9639"
+          >
+            Details
+          </button>
+        </div>
+        <h2 class="text-black text-sm font-bold mb-4 block">
+          {{ estate.Name }} <span v-if="estate.Name && estate.Name">-</span>
           {{ estate.categoryName.charAt(0).toUpperCase() + estate.categoryName.slice(1) }}
         </h2>
-        <span class="text-xs text-gray-400 sm:leading-tight mb-12" v-if="estate.Description">{{
-          estate.Description.substring(0, 100) + " .. "
-        }}</span>
+
         <!--<span class="">{{ estate.City }} - {{ estate.countryName }}</span>-->
-        <span class="block text-black text-sm md:text-base my-2">
-          <span v-if="estate.Rooms" class="lg:mr-2 xl:mr-2 md:mr-10">
+        <div class="grid grid-cols-3 block text-black text-sm md:text-base my-2">
+          <span v-if="estate.Rooms" class="">
             <i class="fas fa-bed  text-yellow-500"></i>
             {{ estate.Rooms }}
           </span>
-          <span v-if="estate.Bathrooms" class="lg:mr-2 xl:mr-2 md:mr-10">
+          <span v-if="estate.Bathrooms" class="">
             <i class="fas fa-sink   text-yellow-500"></i>
             {{ estate.Bathrooms }}
           </span>
-          <span v-if="estate.Area" class="lg:mr-2 xl:mr-2 md:mr-10">
+          <span v-if="estate.Area" class="">
             <i class="fas fa-ruler-combined  text-yellow-500"></i>
             {{ estate.Area }}
           </span>
-        </span>
+        </div>
       </div>
       <div
         class="bg-gray-200 text-green-700 text-xs font-bold rounded-full absolute top-0 ml-2 mt-2 px-2 py-1 text-base"
       >
         <span v-if="estate.purpose === 'for rent'">Rent</span>
         <span v-else-if="estate.purpose === 'for sale'">Sale</span>
-      </div>
-      <div class="flex justify-between px-3 py-1 border border-2 border-t-0">
-        <span
-          v-if="estate.Price"
-          class="block text-base text-black text-base md:text-lg xl:text-xl font-bold align-middle"
-          >{{ estate.Price }} {{ estate.Currency }}</span
-        >
-        <button
-          @click="displayDetails(estate)"
-          class="bg-yellow-500 px-3 py-2 rounded-full font-bold text-xs block text-white md:text-base float-right"
-        >
-          Details
-        </button>
       </div>
     </div>
 

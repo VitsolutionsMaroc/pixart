@@ -63,6 +63,6 @@ export default {
 <style lang="scss" scoped>
 .basemap {
   width: 100%;
-  min-height: 100%;
+  min-height: 3000px;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
-  <div class="modal-wrapper rapperTour p-4">
+  <div class="modal-wrapper rapperTour p-8">
+    <h2 class="text-lg text-gray-600 font-bold mb-4">Create New Contact</h2>
     <!--<div class="modal-container h-auto containerContact">
       <label class="my-2">First Name</label>
       <input type="text" placeholder="First Name" class="px-3 py-2 my-2 border block w-full" />

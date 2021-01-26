@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav" class="bg-gray-900 flex justify-between mb-4">
+    <div id="nav" class="bg-gray-900 flex justify-between">
       <div>
         <img src="./assets/img/logo.png" />
       </div>
