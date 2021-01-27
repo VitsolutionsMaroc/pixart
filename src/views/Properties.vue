@@ -1,6 +1,6 @@
 <template>
   <div class="" style="background:#F7F7F7">
-    <div class="main  px-10">
+    <div class="main  px-10 py-2">
       <div class="filters md:px-40">
         <div class="RentBuy flex justify-start mb-2">
           <button
@@ -445,7 +445,7 @@
 
       <div class="p-2">
         <div class="w-full md:grid grid-cols-2">
-          <div class="xl:text-xl">Results ({{ totalEstates }})</div>
+          <div class="sm:mb-0 mb-2 xl:text-xl">Results ({{ totalEstates }})</div>
           <div class="flex md:justify-end sm:mt-2">
             <!--<span class="mr-6 cursor-pointer xl:text-xl"
               ><i class="fas fa-check-double text-yellow-500"></i> Select</span
@@ -454,17 +454,17 @@
               class="mr-4 md:mr-6 cursor-pointer sm:text-sm md:text-base xl:text-xl"
               @click="togglesOrderByPrice()"
             >
-              <span class="text-base xl:text-xl" v-if="filters.sortByPrice == 'asc'"
+              <span class="text-sm sm:text-base xl:text-xl" v-if="filters.sortByPrice == 'asc'"
                 >Price <i class="fas fa-arrow-down text-yellow-500 "></i
               ></span>
-              <span text-base xl:text-xl v-if="filters.sortByPrice == 'desc'"
+              <span class="text-sm sm:text-base xl:text-xl" v-if="filters.sortByPrice == 'desc'"
                 >Price <i class="fas fa-arrow-up text-yellow-500"></i
               ></span>
             </button>
             <!--<div class="dropdown">-->
             <button
               @click="getEstates()"
-              class="mr-3 md:mr-6 cursor-pointer sm:text-sm md:text-base xl:text-xl"
+              class="mr-3 md:mr-6 cursor-pointer text-sm md:text-base xl:text-xl"
             >
               <i class="far fa-clock text-yellow-500"></i> Update
             </button>

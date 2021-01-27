@@ -12,12 +12,18 @@
       :key="estate.EstateID"
       class="estateCard relative mb-12 overflow-hidden shadow-md"
     >
-      <carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
+      <div @click="displayDetails(estate)" v-if="estate.pictures[0]">
+        <img :src="estate.pictures[0].Url" class="w-full h-32 sm:h-48 object-cover" />
+      </div>
+      <div @click="displayDetails(estate)" v-else>
+        <img src="../assets/img/notavailable.png" class="w-full h-32 h-48 object-cover" />
+      </div>
+      <!--<carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
           <div>
             <div
               @click="displayDetails(estate)"
-              class="bgImage h-48 md:h-72 bg-white"
+              class="bgImage bg-contain bg-center bg-no-repeat h-48 md:h-72 bg-white"
               :style="`background-image: url(${picture.Url})`"
             ></div>
           </div>
@@ -29,27 +35,22 @@
               style="height:100%"
               @click="displayDetails(estate)"
             />
-          </div>-->
+          </div>
         </slide>
         <slide v-if="!estate.pictures || estate.pictures == 0">
           <div>
-            <div
+            <img class="" src="../assets/img/notavailable.png" alt="" />
+            <!--<div
               @click="displayDetails(estate)"
               class="bgImage h-48 md:h-72 bg-white"
-              style="background-image: url('localhost:8080/assets/img/notavailable.png')"
+              :style="`background-image: url(${require('../assets/img/notavailable.png')})`"
             ></div>
           </div>
         </slide>
-      </carousel>
+      </carousel>-->
 
-      <!--<img
-        @click="displayDetails(estate)"
-        :src="estate.mainPicture"
-        class="w-full h-56 object-cover cursor-pointer"
-      />-->
-      <!--{{ username.substring(0, 8) + ".." }}-->
-      <div class="h-36 p-3">
-        <div class="mt-4 xl:mb-4 truncate">
+      <div class="h-40 p-3 relative">
+        <div class="xl:mb-4 truncate">
           <span v-if="estate.Price" class="text-black font-bold text-lg"
             >{{ estate.Price }} {{ estate.Currency }}</span
           >
@@ -67,17 +68,19 @@
         </h2>
 
         <!--<span class="">{{ estate.City }} - {{ estate.countryName }}</span>-->
-        <div class="grid grid-cols-3 block text-black text-sm md:text-base my-2">
+        <div
+          class="grid grid-cols-3 gap-2 block text-black text-sm md:text-base my-2 absolute bottom-0"
+        >
           <span v-if="estate.Rooms" class="">
-            <i class="fas fa-bed  text-yellow-500"></i>
+            <i class="fas fa-bed  text-yellow-500 mr-2"></i>
             {{ estate.Rooms }}
           </span>
           <span v-if="estate.Bathrooms" class="">
-            <i class="fas fa-sink   text-yellow-500"></i>
+            <i class="fas fa-sink   text-yellow-500 mr-2"></i>
             {{ estate.Bathrooms }}
           </span>
           <span v-if="estate.Area" class="">
-            <i class="fas fa-ruler-combined  text-yellow-500"></i>
+            <i class="fas fa-ruler-combined  text-yellow-500 mr-2"></i>
             {{ estate.Area }}
           </span>
         </div>
@@ -122,13 +125,23 @@ export default {
       },
     };
   },
+  computed: {
+    defaultEstatePicure() {
+      return {
+        backgroundImage: `url${require("../assets/img/notavailable.png")}`,
+      };
+    },
+  },
   methods: {
     displayDetails(estate) {
       //this.$modal.hide("estate-details");
       // this.selectedEstate = estate;
       // this.$modal.show("estate-details");
       // this.$router.push()
-      this.$router.push({ name: "properties.details", params: { estateId: estate.EstateID } });
+      this.$router.push({
+        name: "properties.details",
+        params: { estateId: estate.EstateID },
+      });
     },
     displayName() {
       this.estate.Name.substring(1, 2);
@@ -149,11 +162,11 @@ html {
 h2 {
   color: #676360;
 }
-.bgImage {
+/*.bgImage {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-}
+}*/
 .multiselect__option--highlight {
   background: #df9523 !important;
 }

@@ -1,17 +1,41 @@
 <template>
   <div id="app">
-    <div id="nav" class="bg-gray-900 flex justify-between">
-      <div>
+    <div id="nav" class="bg-gray-900 md:flex justify-between mb-4">
+      <div class="flex justify-between item-center">
         <img src="./assets/img/logo.png" />
+
+        <div class="px-4 cursor-pointer md:hidden" id="iconOpen">
+          <svg
+            class="w-6 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="{2}"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </div>
       </div>
-      <div class="navList">
-        <router-link to="/" class="lg:mx-4 mx-2">Home</router-link
-        ><router-link to="/about" class="lg:mx-4 mx-2">About</router-link>
-        <router-link to="/properties" class="lg:mx-4 mx-2">Properties </router-link>
-        <router-link to="#" class="lookingFor bg-yellow-500 p-4 lg:mx-4 mx-2"
-          >Looking for ?</router-link
-        >
-      </div>
+
+      <ul class="md:flex items-center justify-between hidden md:block z-40 mt-2 md:mt-0" id="menu">
+        <li class="mb-2 md:mb-0"><router-link to="/" class="lg:mx-4 mx-2">Home</router-link></li>
+        <li class="mb-2 md:mb-0">
+          <router-link to="/about" class="lg:mx-4 mx-2">About</router-link>
+        </li>
+        <li class="mb-6 md:mb-0">
+          <router-link to="/properties" class="lg:mx-4 mx-2">Properties </router-link>
+        </li>
+        <li class="mb-2 md:mb-0">
+          <router-link to="#" class="lookingFor bg-yellow-500 p-4 lg:mx-4 mx-2"
+            >Looking for ?</router-link
+          >
+        </li>
+      </ul>
     </div>
     <router-view />
   </div>

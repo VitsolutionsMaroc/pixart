@@ -26,3 +26,14 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount("#app");
+
+const iconOpen = document.querySelector("#iconOpen");
+const menu = document.querySelector("#menu");
+
+iconOpen.addEventListener("click", () => {
+  if (menu.classList.contains("hidden")) {
+    menu.classList.remove("hidden");
+  } else {
+    menu.classList.add("hidden");
+  }
+});

@@ -24,18 +24,25 @@
         v-model="contact.Name"
         class="px-3 py-2 my-2 border block w-full"
       />
-      <label class="my-2">Address1</label>
+      <label class="my-2">Firstname</label>
       <input
         type="text"
         placeholder="Address"
-        v-model="contact.Address1"
+        v-model="contact.FirstName"
         class="px-3 py-2 my-2 border block w-full"
       />
-      <label class="my-2">Zip</label>
+      <label class="my-2">Email</label>
       <input
         type="text"
-        placeholder="Zip"
-        v-model="contact.Zip"
+        placeholder="Email"
+        v-model="contact.PrivateEmail"
+        class="px-3 py-2 my-2 border block w-full"
+      />
+      <label class="my-2">Phone Number</label>
+      <input
+        type="text"
+        placeholder="Phone Number"
+        v-model="contact.PrivateMobile"
         class="px-3 py-2 my-2 border block w-full"
       />
       <button class="block bg-yellow-500 w-full py-3 mt-6 text-white font-bold text-lg">
@@ -51,7 +58,7 @@ export default {
     return {
       contact: {
         //Name: "test test",
-        // FirstName: "",
+        FirstName: "",
         Address1: "",
         Address2: "",
         Number: "",
@@ -66,7 +73,7 @@ export default {
         // Comments: "",
         // Message: "",
         // ContactOriginId: 0,
-        // PrivateMobile: "",
+        PrivateMobile: "",
         // AgreementMailingCampaign: true,
         // LanguageId: "en-GB",
         EstateIds: [3515113],
@@ -76,8 +83,8 @@ export default {
         StatusId: 1,
         LanguageId: "fr-BE",
 
-        Name: "New contact",
-        PrivateEmail: "test_contact@whise.mail",
+        Name: "",
+        PrivateEmail: "",
       },
     };
   },
@@ -124,8 +131,9 @@ export default {
             .then((response) => {
               console.log(response);
               this.contact.Name = "";
-              this.contact.Address1 = "";
-              this.contact.Zip = "";
+              this.contact.PrivateEmail = "";
+              this.contact.PrivateMobile = "";
+              this.contact.FirstName = "";
             })
             .catch((error) => {
               console.log(error);
