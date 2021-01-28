@@ -33,8 +33,14 @@
         <li class="mb-6 md:mb-0">
           <router-link to="/properties" class="lg:mx-4 mx-2">Properties </router-link>
         </li>
+        <li class="mb-6 md:mb-0">
+          <router-link to="/evaluation" class="lg:mx-4 mx-2">EVALUATION </router-link>
+        </li>
+        <li class="mb-6 md:mb-0">
+          <router-link to="/contact" class="lg:mx-4 mx-2">Contact Us </router-link>
+        </li>
         <li class="mb-2 md:mb-0">
-          <router-link to="#" class="lookingFor bg-yellow-500 p-2 md:p-4 lg:mx-4 mx-2"
+          <router-link to="/lookingfor" class="lookingFor bg-yellow-500 p-2 md:p-4 lg:mx-4 mx-2"
             >Looking for ?</router-link
           >
         </li>

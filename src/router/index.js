@@ -25,6 +25,21 @@ const routes = [
     name: "properties.details",
     component: () => import("../views/Details.vue"),
   },
+  {
+    path: "/evaluation",
+    name: "evaluation",
+    component: () => import("../views/Evaluation.vue"),
+  },
+  {
+    path: "/lookingfor",
+    name: "lookingfor",
+    component: () => import("../views/Lookingfor.vue"),
+  },
+  {
+    path: "/contact",
+    name: "contact",
+    component: () => import("../views/Contactus.vue"),
+  },
 ];
 
 const router = new VueRouter({

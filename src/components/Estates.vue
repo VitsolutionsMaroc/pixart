@@ -13,10 +13,10 @@
       class="estateCard relative mb-6 md:mb-4 overflow-hidden shadow-md"
     >
       <div @click="displayDetails(estate)" v-if="estate.pictures[0]">
-        <img :src="estate.pictures[0].Url" class="w-full h-32 sm:h-48 object-cover" />
+        <img :src="estate.pictures[0].Url" class="w-full h-52 sm:h-48 object-cover" />
       </div>
       <div @click="displayDetails(estate)" v-else>
-        <img src="../assets/img/notavailable.png" class="w-full h-32 h-48 object-cover" />
+        <img src="../assets/img/notavailable.png" class="w-full h-52 sm:h-48 object-cover" />
       </div>
       <!--<carousel :navigationEnabled="true" :paginationEnabled="false" :perPage="1">
         <slide v-for="picture in estate.pictures" v-bind:key="picture.PictureID">
@@ -49,7 +49,7 @@
         </slide>
       </carousel>-->
 
-      <div class="h-40 p-3 relative">
+      <div class="h-32  sm:h-40 p-3 relative">
         <div class="mb-4 truncate">
           <span v-if="estate.Price" class="text-black font-bold text-lg"
             >{{ estate.Price }} {{ estate.Currency }}</span
