@@ -319,7 +319,7 @@
       </div>
 
       <!-- filters -->
-      <div class="flex flex-wrap space-x-3 mb-4 px-40">
+      <div class="flex flex-wrap space-x-3 mb-4 md:px-40">
         <div
           v-for="category in filters.categories"
           @click="clearFilter('categories', 'id', category.id)"
@@ -493,7 +493,7 @@
 
         <!-- Estate list -->
         <loader class="px-2 py-10" v-show="loading" />
-        <div :class="activeMap ? 'grid grid-cols-2' : ''">
+        <div :class="activeMap ? 'grid md:grid-cols-2' : ''">
           <div v-if="activeMap">
             <BaseMap />
           </div>

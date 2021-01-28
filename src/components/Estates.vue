@@ -10,7 +10,7 @@
     <div
       v-for="estate in estates"
       :key="estate.EstateID"
-      class="estateCard relative mb-12 overflow-hidden shadow-md"
+      class="estateCard relative mb-6 md:mb-4 overflow-hidden shadow-md"
     >
       <div @click="displayDetails(estate)" v-if="estate.pictures[0]">
         <img :src="estate.pictures[0].Url" class="w-full h-32 sm:h-48 object-cover" />
@@ -50,7 +50,7 @@
       </carousel>-->
 
       <div class="h-40 p-3 relative">
-        <div class="xl:mb-4 truncate">
+        <div class="mb-4 truncate">
           <span v-if="estate.Price" class="text-black font-bold text-lg"
             >{{ estate.Price }} {{ estate.Currency }}</span
           >
@@ -62,14 +62,14 @@
             Details
           </button>
         </div>
-        <h2 class="text-black text-sm font-bold mb-4 block">
+        <h2 class="text-black text-sm lg:text-base font-bold block">
           {{ estate.Name }} <span v-if="estate.Name && estate.Name">-</span>
           {{ estate.categoryName.charAt(0).toUpperCase() + estate.categoryName.slice(1) }}
         </h2>
 
         <!--<span class="">{{ estate.City }} - {{ estate.countryName }}</span>-->
         <div
-          class="grid grid-cols-3 gap-2 block text-black text-sm md:text-base my-2 absolute bottom-0"
+          class="grid grid-cols-3 gap-2 block text-black text-sm md:text-base mb-2 absolute bottom-0"
         >
           <span v-if="estate.Rooms" class="">
             <i class="fas fa-bed  text-yellow-500 mr-2"></i>

@@ -5,6 +5,19 @@
 * {
   font-family: "Poppins", sans-serif;
 }
+.multiselect__option--highlight {
+  background: #df9523 !important;
+}
+.multiselect__tag {
+  background: #df9523 !important;
+}
+
+.multiselect__tag:hover {
+  background: #df9523 !important;
+}
+.multiselect__option--highlight:after {
+  background: #f59e0b !important;
+}
 .VueCarousel-dot-container,
 .VueCarousel-dot-container button {
   margin: 0 !important;

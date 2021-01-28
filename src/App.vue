@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <div id="nav" class="bg-gray-900 md:flex justify-between mb-4">
-      <div class="flex justify-between item-center">
+      <div class="flex justify-between items-center">
         <img src="./assets/img/logo.png" />
 
         <div class="px-4 cursor-pointer md:hidden" id="iconOpen">
           <svg
-            class="w-6 text-white"
+            class="w-8 text-white font-bold"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -22,7 +22,10 @@
         </div>
       </div>
 
-      <ul class="md:flex items-center justify-between hidden md:block z-40 mt-2 md:mt-0" id="menu">
+      <ul
+        class="md:flex items-center justify-between hidden md:block z-40 mt-2 md:mt-0 bg-gray-900"
+        id="menu"
+      >
         <li class="mb-2 md:mb-0"><router-link to="/" class="lg:mx-4 mx-2">Home</router-link></li>
         <li class="mb-2 md:mb-0">
           <router-link to="/about" class="lg:mx-4 mx-2">About</router-link>
@@ -31,7 +34,7 @@
           <router-link to="/properties" class="lg:mx-4 mx-2">Properties </router-link>
         </li>
         <li class="mb-2 md:mb-0">
-          <router-link to="#" class="lookingFor bg-yellow-500 p-4 lg:mx-4 mx-2"
+          <router-link to="#" class="lookingFor bg-yellow-500 p-2 md:p-4 lg:mx-4 mx-2"
             >Looking for ?</router-link
           >
         </li>
